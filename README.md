@@ -57,4 +57,4 @@ Clone the repository and install dependencies:
 ```bash
 git clone https://github.com/your-username/BioLaySumm-BiOzU.git
 cd BioLaySumm-BiOzU
-pip install -r requirements.txt
+poetry install
