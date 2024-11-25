@@ -1,7 +1,6 @@
 # BioLaySumm-BiOzU: Lay Summarization for Scientific Articles 
 
-<img src="images/BıOzU_LEGO.png" alt="BiOzU Logo" width="100">
-<img src="images/OzU_LEGO.png" alt="OzU Logo" width="100">
+<img src="images/BıOzU_LEGO.png" alt="BiOzU Logo" width="100"> <img src="images/OzU_LEGO.png" alt="OzU Logo" width="100">
 
 ## Overview
 
