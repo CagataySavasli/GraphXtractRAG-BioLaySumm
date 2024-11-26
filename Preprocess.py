@@ -50,7 +50,7 @@ def get_similarity(row):
     cümlelerin keyword'lere göre benzerliklerini hesaplar.
     """
     global tmp, idx
-    print(f"{idx}|{len(tmp)}|{(idx / len(tmp) * 100):.2f}", end='\r')
+    print(f"\r{idx}|{len(tmp)}|{(idx / len(tmp) * 100):.2f}", end=" ")
 
     idx += 1
 
