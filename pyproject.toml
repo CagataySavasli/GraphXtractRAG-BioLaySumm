@@ -17,6 +17,7 @@ evaluate = "^0.4.3"
 absl-py = "^2.1.0"
 nltk = "^3.9.1"
 rouge-score = "^0.1.2"
+trl = "^0.12.1"
 
 
 [build-system]
