@@ -18,9 +18,11 @@ def zero_shot(row):
 def few_shot(target_row, ref_row):
     massege = []
     for i in range(len(ref_row)):
-        ref_prompt = prompt_factory(ref_row.loc[i])
+        ref_prompt = prompt_factory(prompt_strategy_used, ref_row.loc[i])
+        ref_summary = " ".join(ref_row.loc[i, 'summary'])
+
         massege.append({"role": "user", "content": ref_prompt})
-        massege.append({"role": "assistant", "content": ref_row.loc[i, 'summary']})
+        massege.append({"role": "assistant", "content": ref_summary})
 
     prompt = prompt_factory(prompt_strategy_used, target_row)
     massege.append({"role": "user", "content": prompt})
