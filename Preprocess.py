@@ -4,6 +4,7 @@ from src.Case_Builder import (device,
                               dataset_name
                               )
 from transformers import BertTokenizer, BertModel
+from tqdm import tqdm
 import pandas as pd
 import torch
 import torch.nn.functional as F
@@ -93,23 +94,34 @@ def get_similarity(row):
 
     return result_sections
 
+def get_embeddings(texts, batch_size=256):
+    embeddings = []
+    with torch.no_grad():  # Gradyan hesaplamasını kapat
+        for i in tqdm(range(0, len(texts), batch_size)):
+            str_idx = i
+            end_idx = min(i + batch_size, len(texts))
+            batch_texts = texts[str_idx:end_idx]
+            tokens = tokenizer(batch_texts, padding=True, truncation=True, return_tensors="pt", max_length=512)
+            outputs = model(**tokens)
+            batch_embeddings = outputs.pooler_output.cpu().numpy()
+            embeddings.extend(batch_embeddings)
+    return embeddings
 
-# data_train = data_train.iloc[:5].copy()
-# data_val = data_val.iloc[:2].copy()
-# data_test = data_test.iloc[:3].copy()
 
+print("\nTrain : ")
+tmp, idx = data_train.copy(), 1
+data_train['sentences_similarity'] = data_train.apply(get_similarity, axis=1)
+data_train['title_embedding'] = get_embeddings(data_train['title'].tolist())
+data_train.to_json(f'src/dataset/clean/{dataset_name}/{bert_version}_train.json', orient='records')
 
 print("\nValidation : ")
 tmp, idx = data_val.copy(), 1
 data_val['sentences_similarity'] = data_val.apply(get_similarity, axis=1)
+data_val['title_embedding'] = get_embeddings(data_val['title'].tolist())
 data_val.to_json(f'src/dataset/clean/{dataset_name}/{bert_version}_validation.json', orient='records')
 
 print("\nTest : ")
 tmp, idx = data_test.copy(), 1
 data_test['sentences_similarity'] = data_test.apply(get_similarity, axis=1)
+data_test['title_embedding'] = get_embeddings(data_test['title'].tolist())
 data_test.to_json(f'src/dataset/clean/{dataset_name}/{bert_version}_test.json', orient='records')
-
-print("\nTrain : ")
-tmp, idx = data_train.copy(), 1
-data_train['sentences_similarity'] = data_train.apply(get_similarity, axis=1)
-data_train.to_json(f'src/dataset/clean/{dataset_name}/{bert_version}_train.json', orient='records')
