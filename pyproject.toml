@@ -21,6 +21,8 @@ trl = "^0.12.1"
 optimum = "^1.23.3"
 textstat = "^0.7.4"
 bert-score = "^0.3.13"
+lens = "^0.4.5"
+sacremoses = "^0.1.1"
 
 
 [build-system]
