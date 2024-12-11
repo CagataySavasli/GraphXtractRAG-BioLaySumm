@@ -43,6 +43,16 @@ test-trackers = ["comet-ml", "dvclive", "tensorboard", "wandb"]
 testing = ["bitsandbytes", "datasets", "diffusers", "evaluate", "parameterized", "pytest (>=7.2.0,<=8.0.0)", "pytest-subtests", "pytest-xdist", "scikit-learn", "scipy", "timm", "torchdata (>=0.8.0)", "torchpippy (>=0.2.0)", "tqdm", "transformers"]
 
 [[package]]
+name = "accumulation-tree"
+version = "0.6.4"
+description = "Red/black tree with support for fast accumulation of values in a key range"
+optional = false
+python-versions = "*"
+files = [
+    {file = "accumulation_tree-0.6.4.tar.gz", hash = "sha256:5f907667e4106b5ba140b6b871e1902eb2a93d429b92f8a9f7ddb2bee7704334"},
+]
+
+[[package]]
 name = "aiohappyeyeballs"
 version = "2.4.3"
 description = "Happy Eyeballs for asyncio"
@@ -611,6 +621,17 @@ files = [
 colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
+name = "cloudpickle"
+version = "3.1.0"
+description = "Pickler class to extend the standard pickle.Pickler functionality"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "cloudpickle-3.1.0-py3-none-any.whl", hash = "sha256:fe11acda67f61aaaec473e3afe030feb131d78a43461b718185363384f1ba12e"},
+    {file = "cloudpickle-3.1.0.tar.gz", hash = "sha256:81a929b6e3c7335c863c771d673d105f02efdb89dfaba0c90495d1c64796601b"},
+]
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 description = "Cross-platform colored terminal text."
@@ -742,6 +763,56 @@ files = [
 [package.extras]
 docs = ["ipython", "matplotlib", "numpydoc", "sphinx"]
 tests = ["pytest", "pytest-cov", "pytest-xdist"]
+
+[[package]]
+name = "dask"
+version = "2024.12.0"
+description = "Parallel PyData with Task Scheduling"
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "dask-2024.12.0-py3-none-any.whl", hash = "sha256:e038e87b9f06e7927b81ecde6cf2b49aa699bb902fec11abba5697cb48baeb8d"},
+    {file = "dask-2024.12.0.tar.gz", hash = "sha256:ffd02b06ac06b993df0b48e0ba4fe02abceb5c8b34b40bd91d63f33ec7a272a4"},
+]
+
+[package.dependencies]
+click = ">=8.1"
+cloudpickle = ">=3.0.0"
+dask-expr = {version = ">=1.1,<1.2", optional = true, markers = "extra == \"dataframe\""}
+fsspec = ">=2021.09.0"
+numpy = {version = ">=1.24", optional = true, markers = "extra == \"array\""}
+packaging = ">=20.0"
+pandas = {version = ">=2.0", optional = true, markers = "extra == \"dataframe\""}
+partd = ">=1.4.0"
+pyyaml = ">=5.3.1"
+toolz = ">=0.10.0"
+
+[package.extras]
+array = ["numpy (>=1.24)"]
+complete = ["dask[array,dataframe,diagnostics,distributed]", "lz4 (>=4.3.2)", "pyarrow (>=14.0.1)"]
+dataframe = ["dask-expr (>=1.1,<1.2)", "dask[array]", "pandas (>=2.0)"]
+diagnostics = ["bokeh (>=3.1.0)", "jinja2 (>=2.10.3)"]
+distributed = ["distributed (==2024.12.0)"]
+test = ["pandas[test]", "pre-commit", "pytest", "pytest-cov", "pytest-rerunfailures", "pytest-timeout", "pytest-xdist"]
+
+[[package]]
+name = "dask-expr"
+version = "1.1.20"
+description = "High Level Expressions for Dask"
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "dask_expr-1.1.20-py3-none-any.whl", hash = "sha256:a10755f2bc7d7cfb060b4fc9c7e8b139a03d961c4420ebd50ea319ea906f8b80"},
+    {file = "dask_expr-1.1.20.tar.gz", hash = "sha256:c5be6243296c299e21e02aa93e863e28e6f21ab3c01b645cec3dd56e1b1eac9b"},
+]
+
+[package.dependencies]
+dask = "2024.12.0"
+pandas = ">=2"
+pyarrow = ">=14.0.1"
+
+[package.extras]
+analyze = ["crick", "distributed", "graphviz"]
 
 [[package]]
 name = "datasets"
@@ -1881,6 +1952,39 @@ files = [
 ]
 
 [[package]]
+name = "lens"
+version = "0.4.5"
+description = "Summarise and explore Pandas DataFrames"
+optional = false
+python-versions = "*"
+files = [
+    {file = "lens-0.4.5-py2.py3-none-any.whl", hash = "sha256:568d4e10e2c863442a7e9b76f8368a672f6a7be2f3d8ea1a391407e71af8842e"},
+    {file = "lens-0.4.5.tar.gz", hash = "sha256:aa9457977ea522b2c8587f31c7e826edf4daa080ad47cb5189e248d03c877563"},
+]
+
+[package.dependencies]
+dask = {version = ">=0.18.0", extras = ["dataframe", "delayed"]}
+ipywidgets = ">=6.0.0"
+matplotlib = "*"
+numpy = ">=1.11"
+pandas = "*"
+plotly = ">=3.0.0"
+scipy = "*"
+seaborn = "*"
+tdigest = ">=0.5.0"
+
+[[package]]
+name = "locket"
+version = "1.0.0"
+description = "File-based locks for Python on Linux and Windows"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+files = [
+    {file = "locket-1.0.0-py2.py3-none-any.whl", hash = "sha256:b6c819a722f7b6bd955b80781788e4a66a55628b858d347536b7e81325a3a5e3"},
+    {file = "locket-1.0.0.tar.gz", hash = "sha256:5c0d4c052a8bbbf750e056a8e65ccd309086f4f0f18a2eac306a8dfa4112a632"},
+]
+
+[[package]]
 name = "markdown-it-py"
 version = "3.0.0"
 description = "Python port of markdown-it. Markdown parsing, done right!"
@@ -2782,6 +2886,24 @@ qa = ["flake8 (==5.0.4)", "mypy (==0.971)", "types-setuptools (==67.2.0.1)"]
 testing = ["docopt", "pytest"]
 
 [[package]]
+name = "partd"
+version = "1.4.2"
+description = "Appendable key-value storage"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "partd-1.4.2-py3-none-any.whl", hash = "sha256:978e4ac767ec4ba5b86c6eaa52e5a2a3bc748a2ca839e8cc798f1cc6ce6efb0f"},
+    {file = "partd-1.4.2.tar.gz", hash = "sha256:d022c33afbdc8405c226621b015e8067888173d85f7f5ecebb3cafed9a20f02c"},
+]
+
+[package.dependencies]
+locket = "*"
+toolz = "*"
+
+[package.extras]
+complete = ["blosc", "numpy (>=1.20.0)", "pandas (>=1.3)", "pyzmq"]
+
+[[package]]
 name = "peft"
 version = "0.13.2"
 description = "Parameter-Efficient Fine-Tuning (PEFT)"
@@ -2931,6 +3053,21 @@ files = [
 docs = ["furo (>=2024.8.6)", "proselint (>=0.14)", "sphinx (>=8.0.2)", "sphinx-autodoc-typehints (>=2.4)"]
 test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=8.3.2)", "pytest-cov (>=5)", "pytest-mock (>=3.14)"]
 type = ["mypy (>=1.11.2)"]
+
+[[package]]
+name = "plotly"
+version = "5.24.1"
+description = "An open-source, interactive data visualization library for Python"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "plotly-5.24.1-py3-none-any.whl", hash = "sha256:f67073a1e637eb0dc3e46324d9d51e2fe76e9727c892dde64ddf1e1b51f29089"},
+    {file = "plotly-5.24.1.tar.gz", hash = "sha256:dbc8ac8339d248a4bcc36e08a5659bacfe1b079390b8953533f4eb22169b4bae"},
+]
+
+[package.dependencies]
+packaging = "*"
+tenacity = ">=6.2.0"
 
 [[package]]
 name = "prometheus-client"
@@ -3278,6 +3415,16 @@ python-versions = "*"
 files = [
     {file = "pytz-2024.2-py2.py3-none-any.whl", hash = "sha256:31c7c1817eb7fae7ca4b8c7ee50c72f93aa2dd863de768e1ef4245d426aa0725"},
     {file = "pytz-2024.2.tar.gz", hash = "sha256:2aa355083c50a0f93fa581709deac0c9ad65cca8a9e9beac660adcbd493c798a"},
+]
+
+[[package]]
+name = "pyudorandom"
+version = "1.0.0"
+description = "Generate pseudorandom numbers by using algebra"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pyudorandom-1.0.0.tar.gz", hash = "sha256:f30a093a0170c15f9c7f87eb29f71f0f5fde995528b7c6dc4606d389e8c37755"},
 ]
 
 [[package]]
@@ -3803,6 +3950,23 @@ files = [
 ]
 
 [[package]]
+name = "sacremoses"
+version = "0.1.1"
+description = "SacreMoses"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "sacremoses-0.1.1-py3-none-any.whl", hash = "sha256:31e04c98b169bfd902144824d191825cd69220cdb4ae4bcf1ec58a7db5587b1a"},
+    {file = "sacremoses-0.1.1.tar.gz", hash = "sha256:b6fd5d3a766b02154ed80b962ddca91e1fd25629c0978c7efba21ebccf663934"},
+]
+
+[package.dependencies]
+click = "*"
+joblib = "*"
+regex = "*"
+tqdm = "*"
+
+[[package]]
 name = "safetensors"
 version = "0.4.5"
 description = ""
@@ -4035,6 +4199,27 @@ doc = ["jupyterlite-pyodide-kernel", "jupyterlite-sphinx (>=0.13.1)", "jupytext"
 test = ["Cython", "array-api-strict (>=2.0)", "asv", "gmpy2", "hypothesis (>=6.30)", "meson", "mpmath", "ninja", "pooch", "pytest", "pytest-cov", "pytest-timeout", "pytest-xdist", "scikit-umfpack", "threadpoolctl"]
 
 [[package]]
+name = "seaborn"
+version = "0.13.2"
+description = "Statistical data visualization"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "seaborn-0.13.2-py3-none-any.whl", hash = "sha256:636f8336facf092165e27924f223d3c62ca560b1f2bb5dff7ab7fad265361987"},
+    {file = "seaborn-0.13.2.tar.gz", hash = "sha256:93e60a40988f4d65e9f4885df477e2fdaff6b73a9ded434c1ab356dd57eefff7"},
+]
+
+[package.dependencies]
+matplotlib = ">=3.4,<3.6.1 || >3.6.1"
+numpy = ">=1.20,<1.24.0 || >1.24.0"
+pandas = ">=1.2"
+
+[package.extras]
+dev = ["flake8", "flit", "mypy", "pandas-stubs", "pre-commit", "pytest", "pytest-cov", "pytest-xdist"]
+docs = ["ipykernel", "nbconvert", "numpydoc", "pydata_sphinx_theme (==0.10.0rc2)", "pyyaml", "sphinx (<6.0.0)", "sphinx-copybutton", "sphinx-design", "sphinx-issues"]
+stats = ["scipy (>=1.7)", "statsmodels (>=0.12)"]
+
+[[package]]
 name = "send2trash"
 version = "1.8.3"
 description = "Send file to trash natively under Mac OS X, Windows and Linux"
@@ -4138,6 +4323,40 @@ mpmath = ">=1.1.0,<1.4"
 
 [package.extras]
 dev = ["hypothesis (>=6.70.0)", "pytest (>=7.1.0)"]
+
+[[package]]
+name = "tdigest"
+version = "0.5.2.2"
+description = "T-Digest data structure"
+optional = false
+python-versions = "*"
+files = [
+    {file = "tdigest-0.5.2.2-py2.py3-none-any.whl", hash = "sha256:e32ff6ab62e4defdb93b816c831080d94dfa1efb68a9fa1e7976c237fa9375cb"},
+    {file = "tdigest-0.5.2.2-py3-none-any.whl", hash = "sha256:dd25f8d6e6be002192bba9e4b8c16491d36c10b389f50637818603d1f67c6fb2"},
+    {file = "tdigest-0.5.2.2.tar.gz", hash = "sha256:8deffc8bac024761786f43d9444e3b6c91008cd690323e051f068820a7364d0e"},
+]
+
+[package.dependencies]
+accumulation-tree = "*"
+pyudorandom = "*"
+
+[package.extras]
+tests = ["numpy", "pytest", "pytest-cov", "pytest-timeout"]
+
+[[package]]
+name = "tenacity"
+version = "9.0.0"
+description = "Retry code until it succeeds"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "tenacity-9.0.0-py3-none-any.whl", hash = "sha256:93de0c98785b27fcf659856aa9f54bfbd399e29969b0621bc7f762bd441b4539"},
+    {file = "tenacity-9.0.0.tar.gz", hash = "sha256:807f37ca97d62aa361264d497b0e31e92b8027044942bfa756160d908320d73b"},
+]
+
+[package.extras]
+doc = ["reno", "sphinx"]
+test = ["pytest", "tornado (>=4.5)", "typeguard"]
 
 [[package]]
 name = "terminado"
@@ -4331,6 +4550,17 @@ huggingface-hub = ">=0.16.4,<1.0"
 dev = ["tokenizers[testing]"]
 docs = ["setuptools-rust", "sphinx", "sphinx-rtd-theme"]
 testing = ["black (==22.3)", "datasets", "numpy", "pytest", "requests", "ruff"]
+
+[[package]]
+name = "toolz"
+version = "1.0.0"
+description = "List processing tools and functional utilities"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "toolz-1.0.0-py3-none-any.whl", hash = "sha256:292c8f1c4e7516bf9086f8850935c799a874039c8bcf959d47b600e4c44a6236"},
+    {file = "toolz-1.0.0.tar.gz", hash = "sha256:2c86e3d9a04798ac556793bced838816296a2f085017664e4995cb40a1047a02"},
+]
 
 [[package]]
 name = "torch"
@@ -4918,4 +5148,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "0934e28991a36fcebce79f077762cea48b6271dbbbe8116899ea699b8b72057c"
+content-hash = "3ed80e71b34e5c2335018f671bb059c5a506f7f05787e8d2a79ec76a822393aa"
