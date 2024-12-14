@@ -1,10 +1,10 @@
 import torch
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#device = torch.device('cpu')
+#device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device('cpu')
 
 genai_version = 'BioMistral'
-massage_strategy = 'zero_shot'
+massage_strategy = 'few_shot'
 bert_version = 'BioBERT'
 dataset_name = "elife"
 prompt_strategy_used = 1
