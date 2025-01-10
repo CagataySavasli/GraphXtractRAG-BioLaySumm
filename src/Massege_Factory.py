@@ -27,3 +27,15 @@ def few_shot(target_row, ref_row):
     prompt = prompt_factory(prompt_strategy_used, target_row)
     massege.append({"role": "user", "content": prompt})
     return massege
+
+def massege_for_gbt(massege):
+    prompt = ""
+    for message_dict in massege:
+        role = message_dict['role']
+        content = message_dict['content']
+        if role == 'user':
+            prompt += "## Question:\n" + content + "\n"
+        else:
+            prompt += "## Answer:\n" + content + "\n"
+    prompt += "## Answer:\n"
+    return prompt
