@@ -14,7 +14,7 @@ class AbstractPromptFactory(ABC):
         pass
 
     @abstractmethod
-    def pre_intro(self):
+    def get_instruction(self):
         pass
 
     @abstractmethod
@@ -22,5 +22,5 @@ class AbstractPromptFactory(ABC):
         pass
 
     @abstractmethod
-    def info(self, row):
+    def info(self):
         pass
