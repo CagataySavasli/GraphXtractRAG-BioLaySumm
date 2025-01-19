@@ -7,13 +7,13 @@ class ZeroShotPromptFactory(AbstractPromptFactory):
 
     def get_prompt(self):
         prompt = (
-            self.pre_intro()
-            + "For the given inputs, generate the outputs.\n\n"
-            + self.info(self.row)
+            self.get_instruction()
+            + "For the given infos, generate the outputs.\n\n"
+            + self.info()
         )
         return prompt
 
-    def pre_intro(self):
+    def get_instruction(self):
         return (
             "# TASK:\n"
             "Craft a succinct and straightforward lay summary aimed at an audience without a specialized background in the subject. Leverage the title, abstract, and key sentences provided to ensure your summary encapsulates the essence and findings of the scientific research. Here is a structured breakdown to guide your summary:\n\n"
@@ -41,12 +41,12 @@ class ZeroShotPromptFactory(AbstractPromptFactory):
     def few_info(self, row):
         raise NotImplementedError("ZeroShotPromptFactory does not support few_info")
 
-    def info(self, row):
+    def info(self):
         return (
             "## INPUT:\n"
-            f"title: {row['title']}\n"
-            f"abstract: [{' '.join(map(str, row['abstract']))}]\n"
-            f"selected_key_sentences: {str(row['rag_sentences'])}\n"
+            f"title: {self.row['title']}\n"
+            f"abstract: [{' '.join(map(str, self.row['abstract']))}]\n"
+            f"selected_key_sentences: {str(self.row['rag_sentences'])}\n"
             "## OUTPUT:\n"
             f"lay_summary: \n\n"
         )
