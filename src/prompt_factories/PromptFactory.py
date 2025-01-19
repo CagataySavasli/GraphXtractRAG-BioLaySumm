@@ -20,3 +20,9 @@ class PromptFactory:
 
     def get_prompt(self):
         return self.factory.get_prompt()
+
+    def get_instruction(self):
+        return self.factory.get_instruction()
+
+    def get_info(self):
+        return self.factory.info()
