@@ -25,6 +25,7 @@ lens = "^0.4.5"
 sacremoses = "^0.1.1"
 huggingface = "^0.0.1"
 google-generativeai = "^0.8.3"
+python-louvain = "^0.16"
 
 
 [build-system]
