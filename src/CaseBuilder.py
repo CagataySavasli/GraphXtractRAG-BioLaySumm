@@ -19,13 +19,13 @@ class CaseBuilder(metaclass=SingletonMeta):
     # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     device = torch.device('cpu')
 
-    def __init__(self, genai_version, massage_strategy, bert_version, dataset_name, prompt_strategy_used):
-        # Bu sınıf zaten oluşturulduysa tekrar initialize edilmeyecek
+    def __init__(self, genai_version, bert_version, massage_strategy, rag_strategy, rag_case, dataset_name):
         self.genai_version = genai_version
-        self.massage_strategy = massage_strategy
         self.bert_version = bert_version
+        self.massage_strategy = massage_strategy
+        self.rag_strategy = rag_strategy
+        self.rag_case = rag_case
         self.dataset_name = dataset_name
-        self.prompt_strategy_used = prompt_strategy_used
 
         if bert_version == 'BioBERT':
             self.bert_model_name = 'dmis-lab/biobert-base-cased-v1.2'
@@ -36,6 +36,8 @@ class CaseBuilder(metaclass=SingletonMeta):
             self.genai_model_name = 'BioMistral/BioMistral-7B'
         elif genai_version == 'BioGBT':
             self.genai_model_name = 'microsoft/BioGPT-Large-PubMedQA'
+        elif genai_version == 'Gemini':
+            self.genai_model_name = 'models/gemini-1.5-flash-001-tuning'
 
     def get_case_signature(self):
-        return f"{self.genai_version}_{self.massage_strategy}_{self.bert_version}_{self.dataset_name}_{self.prompt_strategy_used}.csv"
+        return f"{self.genai_version}_{self.bert_version}_{self.massage_strategy}_{self.rag_strategy}_{self.rag_case}_{self.dataset_name}.csv"
