@@ -48,17 +48,17 @@ class FewShotPromptFactory(AbstractPromptFactory):
         return (
             "## INPUT:\n"
             f"title: {row['title']}\n"
-            f"abstract: [{' '.join(map(str, row['abstract']))}]\n"
+            f"abstract: [{row['abstract']}]\n"
             f"selected_key_sentences: {str(row['rag_sentences'])}\n"
             "## OUTPUT:\n"
-            f"lay_summary: {' '.join(map(str, row['summary']))}\n\n"
+            f"lay_summary: {row['summary']}\n\n"
         )
 
     def info(self):
         return (
             "## INPUT:\n"
             f"title: {self.row['title']}\n"
-            f"abstract: [{' '.join(map(str, self.row['abstract']))}]\n"
+            f"abstract: [{self.row['abstract']}]\n"
             f"selected_key_sentences: {str(self.row['rag_sentences'])}\n"
             "## OUTPUT:\n"
             f"lay_summary: \n\n"
