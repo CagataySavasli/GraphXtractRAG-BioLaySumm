@@ -1,48 +1,26 @@
 from src.rag_factories.AbstractRAG_Factory import AbstractRAG_Factory
 from src.selectors.GCNSelector import GCNSelector
-from sklearn.metrics.pairwise import cosine_similarity
-from torch_geometric.data import Data
-import numpy as np
-import pandas as pd
+from src.selectors.MIXSelector import MIXSelector
+from src.utility.GraphGenerator import GraphGenerator
 import torch
 import torch.nn.functional as F
 class GESRAG(AbstractRAG_Factory):
     def __init__(self, n):
-        self.model = GCNSelector(768, 128)
-        self.model.load_state_dict(torch.load("/Users/cagatay/Desktop/CS/Projects/BioLaySumm-BiOzU/models/GCN_20_selector.pth", weights_only=True))
+        self.model = MIXSelector(768, 128)
+        self.model.load_state_dict(torch.load("/Users/cagatay/Desktop/CS/Projects/BioLaySumm-BiOzU/models/MIX_20_selector.pth", weights_only=True))
         self.model.eval()
 
         self.n =n
 
+        self.graph_generator = GraphGenerator()
+
         self.row = None
-        self.nodes = None
         self.sentences = None
 
-    def create_graph(self):
-
-        # Tüm cosine similarity değerlerini hesapla
-        similarities = cosine_similarity(self.nodes)
-
-        # Ortalama cosine similarity hesaplama
-        avg_similarity = np.mean(similarities[np.triu_indices_from(similarities, k=1)])
-
-        # Ortalama değerden büyük olan kenarları seç
-        edges = [
-            (i, j, similarities[i, j])
-            for i in range(len(self.nodes)) for j in range(len(self.nodes))
-            if i != j and similarities[i, j] > avg_similarity
-        ]
-
-        edges_index = torch.tensor([[e[0], e[1]] for e in edges], dtype=torch.long).t().contiguous()
-
-        data = Data(x=torch.tensor(self.nodes, dtype=torch.float), edge_index=edges_index)
-
-        return data
-
-    def set_row(self, row: pd.Series):
+    def set_row(self, row):
         self.row = row
-        self.nodes = [x for y in self.row['sections_embedding'] for x in y]
-        self.sentences = [x for y in self.row['sections'] for x in y]
+        self.graph_generator.set_row(row)
+        self.sentences = self.graph_generator.get_sentences()
 
     def select_sentences(self, data):
 
@@ -64,5 +42,5 @@ class GESRAG(AbstractRAG_Factory):
         return selected_sentences
 
     def get_n_sentences(self):
-        data = self.create_graph()
+        data = self.graph_generator.create_graph()
         return self.select_sentences(data)
