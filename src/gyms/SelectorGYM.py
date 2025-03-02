@@ -4,7 +4,9 @@
 
 from src.selectors.GCNSelector import GCNSelector
 from src.selectors.GATSelector import GATSelector
+from src.selectors.MIXSelector import MIXSelector
 from src.prompt_factories.PromptFactory import PromptFactory
+from src.utility.ResultCalculator import ResultCalculator
 
 from typing import List, Tuple, Optional
 import time
@@ -24,6 +26,7 @@ from torch_geometric.data import Data
 
 import google.generativeai as genai
 
+import os
 
 class SelectorGYM():
     def __init__(self, selector_type: str,
@@ -42,13 +45,19 @@ class SelectorGYM():
             self.selector = GCNSelector(in_channels=768, hidden_channels=128)
         elif selector_type == "GAT":
             self.selector = GATSelector(in_channels=768, hidden_channels=128)
+        elif selector_type == "MIX":
+            self.selector = MIXSelector(in_channels=768, hidden_channels=128)
         else:
             raise ValueError("Unsupported selector type")
 
         # Number of nodes to select
         self.n_select = n_select
 
-        self.selector_path = f"/Users/cagatay/Desktop/CS/Projects/BioLaySumm-BiOzU/models/GCN_20_selector.pth"
+        self.selector_path = f"/Users/cagatay/Desktop/CS/Projects/BioLaySumm-BiOzU/models/{selector_type}_{n_select}_selector.pth"
+
+        if not  os.path.exists(self.selector_path):
+            torch.save(self.selector.state_dict(), self.selector_path)
+            print("Initialize selector model saved.")
 
         # Initialize the optimizer
         self.optimizer = optim.Adam(self.selector.parameters(), lr=0.01)
@@ -70,6 +79,9 @@ class SelectorGYM():
 
         # Train loss history for analysis train performance
         self.train_loss_history = []
+
+        # Reward Calculater
+        self.reward_calculater = ResultCalculator()
 
     def reset(self):
         self.test_error_count = 0
@@ -160,7 +172,10 @@ class SelectorGYM():
         """
 
         # Compute ROUGE reward based on the similarity of generated and reference summaries
-        reward_score = self.calculate_rouge_reward(generated_summary, ground_truth_summary)
+        #reward_score = self.calculate_rouge_reward(generated_summary, ground_truth_summary)
+
+        # Compute reward score based on the similarity of generated and reference summaries
+        reward_score = self.reward_calculater.reward_function(generated_summary, ground_truth_summary)
 
         # Update the baseline using Exponential Moving Average (EMA)
         self.running_reward_baseline = (
