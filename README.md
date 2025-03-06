@@ -1,60 +1,74 @@
-# BioLaySumm-BiOzU: Lay Summarization for Scientific Articles 
+# BioLaySumm-BiOzU: Query Independent Gemini + Graph-based Extractive Summarization with RAG
 
 <img src="images/BıOzU_LEGO.png" alt="BiOzU Logo" width="100"> <img src="images/OzU_LEGO.png" alt="OzU Logo" width="100">
 
 ## Overview
 
-**BioLaySumm-BiOzU** is a state-of-the-art model designed for the BioLaySumm competition. The project aims to generate high-quality lay summaries for scientific articles from eLife and PLOS datasets. By leveraging cutting-edge NLP techniques such as quantized T5-Small and BioBERT with a Retrieval-Augmented Generation (RAG) approach, BioLaySumm-BiOzU bridges the gap between complex scientific texts and layman-friendly summaries.
+**BioLaySumm-BiOzU** is a cutting-edge project developed for the BioLaySumm competition. It generates high-quality lay summaries for scientific articles by leveraging advanced NLP techniques. The current approach integrates a powerful **Gemini model** for text generation with a **graph-based extractive summarization** method within a query independent Retrieval-Augmented Generation (RAG) framework.
 
 ---
 
 ## Features
 
-### Key Components:
-1. **T5-Small Model with Quantization**
-   - Efficient and optimized for resource-constrained environments.
-   - Fine-tuned to handle scientific text summarization.
+### Main Components
 
-2. **RAG Approach with BioBERT**
-   - Utilizes BioBERT embeddings to identify semantically significant sentences.
-   - Ranks sentences based on their cosine similarity with the article's Title, Abstract, and keywords.
+1. **Advanced Generation with Gemini Model**
+   - Utilizes the superior text understanding and generation capabilities of the Gemini model.
+   - Provides improved performance, fluency, and adaptability in summarizing complex scientific texts.
 
-3. **Dynamic Prompt Creation**
-   - The input to T5-Small is crafted using:
-     - The article's **Title** and **Abstract**.
-     - 10 key sentences selected based on similarity metrics:
-       - 2 sentences with the highest similarity to the Title.
-       - 3 sentences with the highest similarity to the Abstract.
-       - 5 sentences with the highest overall similarity to the combined features.
+2. **Query Independent RAG Architecture**
+   - Directly leverages the article’s structural and semantic information without relying on external queries.
+   - Enhances the consistency and comprehensiveness of the generated lay summaries.
+   
+   **Methodology:**
+   - **BioBERT for Sentence Embeddings**
+     - Generates robust embeddings for each sentence.
+     
+   - **SimilarityRAG**
+     - Incorporates similarity with title embedding models to ensure that selected sentences align closely with the article’s core message.
+     
+   - **PageRankRAG**
+     - Constructs a graph representation of the article.
+     - Employs the PageRank algorithm to rank sentences based on their connectivity and importance within the graph.
+     
+   - **Graph-based Extractive Summarization RAG (GES-RAG)**
+     - Constructs a graph representation of the article.
+     - Utilizes Graph Embedding Summarization (GES) to identify and rank the most influential sentences.
 
-### Scalable Design
-- The model seamlessly processes diverse article lengths and ensures relevance and clarity in lay summaries.
+3. **Dynamic Input Creation**
+   - Merges the article’s graph-selected key sentences from **Title** and **All Sections** to form a dynamic prompt.
+   - Ensures the Gemini model processes critical content effectively for high-quality summary generation.
+
 
 ---
 
 ## Workflow
 
-1. **Data Processing**
-   - Articles from eLife and PLOS datasets are preprocessed to extract key sections.
-   - Keywords, Title, and Abstract are identified for similarity comparison.
+1. **Data Preprocessing**
+   - Scientific articles are parsed to extract key sections such as the title, abstract, keywords, and more.
 
 2. **Sentence Embedding Extraction**
-   - BioBERT generates embeddings for each sentence in the article.
+   - Generates representative embeddings for each sentence using advanced embedding techniques.
 
-3. **Cosine Similarity Calculation**
-   - Similarity scores are computed between sentences and the Title, Abstract, and keywords.
+3. **Graph Construction and Ranking**
+   - Constructs a graph where nodes represent sentences and edges represent semantic similarities.
+   - Applies the **PageRank algorithm** to identify and rank the most influential sentences.
 
-4. **Sentence Selection**
-   - Top 10 sentences are chosen based on predefined criteria for the summarization input.
+4. **Similarity with Title Embedding**
+   - Computes similarity scores between each sentence and the title using title embedding models.
+   - Refines the selection of key sentences to ensure relevance to the article’s main theme.
 
-5. **Lay Summary Generation**
-   - T5-Small model generates the lay summary using the crafted prompt.
+5. **Dynamic Input Creation**
+   - Combines the title, abstract, and selected sentences into a dynamic prompt tailored for the Gemini model.
+
+6. **Summary Generation**
+   - The Gemini model processes the dynamic prompt to generate a coherent, lay-friendly summary.
 
 ---
 
 ## Installation
 
-Clone the repository and install dependencies:
+Clone the repository and install the required dependencies:
 
 ```bash
 git clone https://github.com/your-username/BioLaySumm-BiOzU.git

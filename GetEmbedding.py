@@ -1,5 +1,5 @@
-from src.utility.DatasetGenerator import DatasetGenerator
-from src.utility.CaseBuilder import CaseBuilder
+from lib.utility.DatasetGenerator import DatasetGenerator
+from lib.utility.CaseBuilder import CaseBuilder
 
 import pandas as pd
 
@@ -16,7 +16,7 @@ dataset_info = "train"
 case_builder = CaseBuilder(genai_type, bert_model, message_type, rag_type, rag_strategy, dataset)
 
 # Load the dataset
-df = pd.read_json(f'src/dataset/raw/elife/{dataset_info}.json')
+df = pd.read_json(f'dataset/raw/elife/{dataset_info}.json')
 
 dataset_generator = DatasetGenerator(case_builder)
 dataset_generator.set_data(df)

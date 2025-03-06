@@ -1,4 +1,4 @@
-from src.prompt_factories.AbstractPromptFactory import AbstractPromptFactory
+from lib.prompt_factories.AbstractPromptFactory import AbstractPromptFactory
 
 
 class ZeroShotPerformanceAnalyzerFactory(AbstractPromptFactory):

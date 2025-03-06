@@ -1,5 +1,6 @@
-from src.MessageFactory import MessageFactory
-from src.utility.ResultCalculator import ResultCalculator
+from lib.utility.MessageFactory import MessageFactory
+from lib.utility.ResultCalculator import ResultCalculator
+from lib.utility.CaseBuilder import CaseBuilder
 
 import google.generativeai as genai
 
@@ -10,11 +11,9 @@ genai.configure(api_key="") # Write Your Gemini API Key
 
 
 class GeminiGYM:
-    def __init__(self, case_builder, n, n_2=None, n_3=None):
-        self.case_builder = case_builder
-        self.n = n
-        self.n_2 = n_2
-        self.n_3 = n_3
+    def __init__(self):
+        self.case_builder = CaseBuilder()
+        self.n = self.case_builder.rag_n
 
         #self.massage_factory = MessageFactory(self.case_builder, n, n_2, n_3)
         self.result_calculater = ResultCalculator()
@@ -30,16 +29,16 @@ class GeminiGYM:
         self.result = None
 
     def set_test_data(self, test_data):
-        self.test_data = test_data
+        self.test_data = test_data.copy()
 
     def set_train_data(self, train_data):
-        self.train_data = train_data
+        self.train_data = train_data.copy()
 
     def set_base_model(self, base_model):
         self.base_model = base_model
 
     def get_messages(self):
-        massage_factory = MessageFactory(self.case_builder, self.n, self.n_2, self.n_3)
+        massage_factory = MessageFactory()
 
         train_messages = []
         for _, row in self.train_data.iterrows():
@@ -66,7 +65,7 @@ class GeminiGYM:
         self.result = operation.result()
 
     def evaluate(self):
-        massage_factory = MessageFactory(self.case_builder, self.n, self.n_2, self.n_3)
+        massage_factory = MessageFactory()
 
         test_messages = []
         for _, row in self.test_data.iterrows():

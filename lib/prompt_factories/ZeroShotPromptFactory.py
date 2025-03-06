@@ -1,21 +1,15 @@
-from src.prompt_factories.AbstractPromptFactory import AbstractPromptFactory
+from lib.prompt_factories.AbstractPromptFactory import AbstractPromptFactory
 
 
-class FewShotPromptFactory(AbstractPromptFactory):
+class ZeroShotPromptFactory(AbstractPromptFactory):
+    def __init__(self, row=None):
+        super().__init__(row=row)
+
     def get_prompt(self):
-        few_shot_prompt = ""
-        if self.ref_rows is not None:
-            few_shot_prompt += "# EXAMPLES:\n\n"
-            for idx, ref_row in self.ref_rows.iterrows():
-                few_shot_prompt += f"## Example {idx + 1}:\n"
-                few_shot_prompt += self.few_info(ref_row)
-                few_shot_prompt += "---\n\n"
-
         prompt = (
-                self.get_instruction()
-                + few_shot_prompt
-                + "For the given inputs, generate the outputs.\n\n"
-                + self.info()
+            self.get_instruction()
+            + "For the given infos, generate the outputs.\n\n"
+            + self.info()
         )
         return prompt
 
@@ -45,14 +39,7 @@ class FewShotPromptFactory(AbstractPromptFactory):
         )
 
     def few_info(self, row):
-        return (
-            "## INPUT:\n"
-            f"title: {row['title']}\n"
-            f"abstract: [{row['abstract']}]\n"
-            f"selected_key_sentences: {str(row['rag_sentences'])}\n"
-            "## OUTPUT:\n"
-            f"lay_summary: {row['summary']}\n\n"
-        )
+        raise NotImplementedError("ZeroShotPromptFactory does not support few_info")
 
     def info(self):
         return (

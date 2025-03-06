@@ -1,3 +1,4 @@
+from lib.utility.CaseBuilder import CaseBuilder
 from transformers import AutoTokenizer, AutoModel
 import pandas as pd
 import inflect
@@ -5,11 +6,11 @@ import re
 import torch
 
 class DatasetGenerator:
-    def __init__(self, casebuilder):
+    def __init__(self):
         """
         Initialize the DatasetGenerator with the given casebuilder.
         """
-        self.casebuilder = casebuilder
+        self.casebuilder = CaseBuilder()
         self.data = None
         self.idx = 0
 
@@ -22,8 +23,8 @@ class DatasetGenerator:
         self._filter_dict = self._build_filter_dict()
 
         # Initialize tokenizer and model from the specified BERT model name
-        self.tokenizer = AutoTokenizer.from_pretrained(casebuilder.bert_model_name)
-        self.model = AutoModel.from_pretrained(casebuilder.bert_model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.casebuilder.bert_model_name)
+        self.model = AutoModel.from_pretrained(self.casebuilder.bert_model_name)
         self.model.eval()
 
     def _build_filter_dict(self) -> dict:

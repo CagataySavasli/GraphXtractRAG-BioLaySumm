@@ -1,13 +1,12 @@
-from src.rag_factories.AbstractRAG_Factory import AbstractRAG_Factory
-from src.selectors.GCNSelector import GCNSelector
-from src.selectors.MIXSelector import MIXSelector
-from src.utility.GraphGenerator import GraphGenerator
+from lib.rag_factories.AbstractRAG_Factory import AbstractRAG_Factory
+from lib.selectors.MIXSelector import MIXSelector
+from lib.utility.GraphGenerator import GraphGenerator
 import torch
 import torch.nn.functional as F
 class GESRAG(AbstractRAG_Factory):
     def __init__(self, n):
-        self.model = MIXSelector(768, 128)
-        self.model.load_state_dict(torch.load("/Users/cagatay/Desktop/CS/Projects/BioLaySumm-BiOzU/models/MIX_20_selector.pth", weights_only=True))
+        self.model = MIXSelector(770, 128)
+        self.model.load_state_dict(torch.load("./outputs/models/MIX_20_selector.pth", weights_only=True))
         self.model.eval()
 
         self.n =n

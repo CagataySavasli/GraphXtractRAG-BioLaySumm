@@ -1,8 +1,7 @@
-from src.rag_factories.AbstractRAG_Factory import AbstractRAG_Factory
+from lib.rag_factories.AbstractRAG_Factory import AbstractRAG_Factory
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import networkx as nx
-import matplotlib.pyplot as plt
 
 
 class GraphRAG(AbstractRAG_Factory):

@@ -21,6 +21,12 @@ class GraphGenerator:
         self.header_clusters = self.row['heading_clusters']
         self.position_sentences = [x/len(self.sentences) for x in range(len(self.sentences))]
 
+    def reset(self):
+        self.nodes = None
+        self.sentences = None
+        self.header_clusters = []
+        self.position_sentences = []
+
     def get_sentences(self):
         return self.sentences
     def create_graph(self):
@@ -40,9 +46,10 @@ class GraphGenerator:
 
         edges_index = torch.tensor([[e[0], e[1]] for e in edges], dtype=torch.long).t().contiguous()
 
-        for idx in range(len(self.nodes)):
-            self.nodes[idx].insert(0, self.position_sentences[idx])
-            self.nodes[idx].insert(0, self.header_clusters[idx])
+        if len(self.nodes[0]) == 768:
+            for idx in range(len(self.nodes)):
+                self.nodes[idx].insert(0, self.position_sentences[idx])
+                self.nodes[idx].insert(0, self.header_clusters[idx])
 
         data = Data(x=torch.tensor(self.nodes, dtype=torch.float), edge_index=edges_index)
 

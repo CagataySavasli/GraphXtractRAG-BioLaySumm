@@ -2,11 +2,13 @@
 # This file contains the SelectorGYM class, which is a class that is used to train selector models.
 # ----------------------------------------------------------------------------
 
-from src.selectors.GCNSelector import GCNSelector
-from src.selectors.GATSelector import GATSelector
-from src.selectors.MIXSelector import MIXSelector
-from src.prompt_factories.PromptFactory import PromptFactory
-from src.utility.ResultCalculator import ResultCalculator
+from lib.selectors.GCNSelector import GCNSelector
+from lib.selectors.GATSelector import GATSelector
+from lib.selectors.MIXSelector import MIXSelector
+from lib.prompt_factories.PromptFactory import PromptFactory
+from lib.utility.CaseBuilder import CaseBuilder
+from lib.utility.ResultCalculator import ResultCalculator
+from lib.utility.GraphGenerator import GraphGenerator
 
 from typing import List, Tuple, Optional
 import time
@@ -28,32 +30,39 @@ import google.generativeai as genai
 
 import os
 
+import io
+import warnings
+import contextlib
+import logging
+
+logging.getLogger("transformers").setLevel(logging.ERROR)
+
 class SelectorGYM():
     def __init__(self, selector_type: str,
-                 n_select: int,
-                 genai_model_name: str,
-                 prompt_factory: PromptFactory,
                  df_train: pd.DataFrame,
                  df_test: pd.DataFrame):
 
+        # Initialize the case builder
+        self.case_builder = CaseBuilder()
+
         # Initialize the dataframes
-        self.df_train = df_train
-        self.df_test = df_test
+        self.df_train = df_train.copy()
+        self.df_test = df_test.copy()
 
         # Initialize the selector model
         if selector_type == "GCN":
-            self.selector = GCNSelector(in_channels=768, hidden_channels=128)
+            self.selector = GCNSelector(in_channels=770, hidden_channels=128)
         elif selector_type == "GAT":
-            self.selector = GATSelector(in_channels=768, hidden_channels=128)
+            self.selector = GATSelector(in_channels=770, hidden_channels=128)
         elif selector_type == "MIX":
-            self.selector = MIXSelector(in_channels=768, hidden_channels=128)
+            self.selector = MIXSelector(in_channels=770, hidden_channels=128)
         else:
             raise ValueError("Unsupported selector type")
 
         # Number of nodes to select
-        self.n_select = n_select
+        self.n_select = self.case_builder.rag_n
 
-        self.selector_path = f"/Users/cagatay/Desktop/CS/Projects/BioLaySumm-BiOzU/models/{selector_type}_{n_select}_selector.pth"
+        self.selector_path = f"./outputs/models/{selector_type}_{self.n_select}_selector.pth"
 
         if not  os.path.exists(self.selector_path):
             torch.save(self.selector.state_dict(), self.selector_path)
@@ -63,11 +72,13 @@ class SelectorGYM():
         self.optimizer = optim.Adam(self.selector.parameters(), lr=0.01)
 
         # Initialize the Generative AI model
-        self.genai_model_name = genai_model_name
+        #self.genai_model_name = genai_model_name
+        self.genai_model_name = self.case_builder.genai_model_name
         self.genai_model = genai.GenerativeModel(self.genai_model_name)
 
         # Initialize the prompt factory
-        self.prompt_factory = prompt_factory
+        #self.prompt_factory = prompt_factory
+        self.prompt_factory = PromptFactory()
 
         # Global baseline variables for Exponential Moving Average (EMA)
         self.running_reward_baseline = 0.0  # Initial baseline value
@@ -83,6 +94,12 @@ class SelectorGYM():
         # Reward Calculater
         self.reward_calculater = ResultCalculator()
 
+        # Graph Generator
+        self.graph_generator = GraphGenerator()
+
+        # For prevent useless print:
+        self.f = io.StringIO()
+
     def reset(self):
         self.test_error_count = 0
         self.train_error_count = 0
@@ -93,65 +110,15 @@ class SelectorGYM():
         Reset the Generative AI model with a new model name.
         """
         print("Resetting Generative AI model...")
+        print(self.genai_model_name)
         self.genai_model = genai.GenerativeModel(self.genai_model_name)
 
     def get_graphs(self, row: pd.Series) -> Tuple[Data, List[str]]:
-        """
-        Generate a graph representation from the given row of dataframe
-
-        Args:
-            row (pd.Series): A row of dataframe that contains the sections and their embeddings
-
-        Returns:
-            Tuple[Data, List[str]]: A tuple that contains the graph data and the sentences of the sections
-        """
-
-        # Flaten the nodes and sentences
-        nodes = [x for y in row['sections_embedding'] for x in y]
-        sentences = [x for y in row['sections'] for x in y]
-
-        # Calculate all cosine similarity values
-        similarities = cosine_similarity(nodes)
-
-        # Calculate the average cosine similarity as a threshold
-        avg_similarity = np.mean(similarities[np.triu_indices_from(similarities, k=1)])
-
-        # Select the edges that have similarity greater than the average similarity
-        edges = [
-            (i, j, similarities[i, j])
-            for i in range(len(nodes)) for j in range(len(nodes))
-            if i != j and similarities[i, j] > avg_similarity
-        ]
-
-        # Create the edge index tensor
-        edges_index = torch.tensor([[e[0], e[1]] for e in edges], dtype=torch.long).t().contiguous()
-
-        # Create the graph data
-        data = Data(x=torch.tensor(nodes, dtype=torch.float), edge_index=edges_index)
+        self.graph_generator.set_row(row)
+        data = self.graph_generator.create_graph()
+        sentences = self.graph_generator.get_sentences()
 
         return data, sentences
-
-    def calculate_rouge_reward(self, predicted_text: str, reference_text: str) -> float:
-        """
-        Computes the ROUGE-based reward for reinforcement learning.
-
-        Args:
-            predicted_text (str): The generated summary text.
-            reference_text (str): The ground-truth summary text.
-
-        Returns:
-            float: The average ROUGE-1 and ROUGE-L F1 score.
-        """
-        # Initialize the ROUGE scorer with stemming enabled
-        rouge_scorer_obj = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
-
-        # Compute ROUGE scores between reference and predicted summaries
-        rouge_scores = rouge_scorer_obj.score(reference_text, predicted_text)
-
-        # Compute the average F1 score for ROUGE-1 and ROUGE-L as the final reward
-        average_rouge_f1 = (rouge_scores['rouge1'].fmeasure + rouge_scores['rougeL'].fmeasure) / 2.0
-
-        return average_rouge_f1
 
     def compute_rl_loss(self, log_probabilities: torch.Tensor,
                         generated_summary: str,
@@ -171,11 +138,12 @@ class SelectorGYM():
             torch.Tensor: The computed reinforcement learning loss.
         """
 
-        # Compute ROUGE reward based on the similarity of generated and reference summaries
-        #reward_score = self.calculate_rouge_reward(generated_summary, ground_truth_summary)
 
         # Compute reward score based on the similarity of generated and reference summaries
-        reward_score = self.reward_calculater.reward_function(generated_summary, ground_truth_summary)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            with contextlib.redirect_stdout(self.f), contextlib.redirect_stderr(self.f):
+                reward_score = self.reward_calculater.reward_function(generated_summary, ground_truth_summary)
 
         # Update the baseline using Exponential Moving Average (EMA)
         self.running_reward_baseline = (

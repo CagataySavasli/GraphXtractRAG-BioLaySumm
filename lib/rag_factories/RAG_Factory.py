@@ -1,23 +1,25 @@
-from src.rag_factories.GraphRAG_Factory import GraphRAG
-from src.rag_factories.SimilarityRAG_Factory import RAG
-from src.rag_factories.PersonalizationGraphRAG import PersonalizationGraphRAG
-from src.rag_factories.GESRAG_Factory import GESRAG
+from lib.rag_factories.GraphRAG_Factory import GraphRAG
+from lib.rag_factories.SimilarityRAG_Factory import RAG
+from lib.rag_factories.PersonalizationGraphRAG import PersonalizationGraphRAG
+
+from lib.utility.CaseBuilder import CaseBuilder
+
+from lib.rag_factories.GESRAG_Factory import GESRAG
 import pandas as pd
 
 
 class RAG_Factory:
-    def __init__(self, case_builder, n, n_2=None, n_3=None):
-        self.strategy = case_builder.rag_strategy
-        self.case = case_builder.rag_case
-        self.n = n
-        self.n_2 = n_2
-        self.n_3 = n_3
+    def __init__(self):
+        self.case_builder = CaseBuilder()
+        self.strategy = self.case_builder.rag_strategy
+        self.case = self.case_builder.rag_case
+        self.n = self.case_builder.rag_n
 
         self.factory = self.build_factory()
 
     def build_factory(self):
         if self.strategy == "similarityRAG":
-            return RAG(self.case, self.n, self.n_2, self.n_3)
+            return RAG(self.case, self.n)
         elif self.strategy == "graphRAG":
             return GraphRAG(self.case, self.n)
         elif self.strategy == "personalizationGraphRAG":

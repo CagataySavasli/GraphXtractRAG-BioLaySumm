@@ -1,11 +1,11 @@
-from src.rag_factories.AbstractRAG_Factory import AbstractRAG_Factory
+from lib.rag_factories.AbstractRAG_Factory import AbstractRAG_Factory
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 
 class RAG(AbstractRAG_Factory):
 
-    def __init__(self, case, title_n, abstract_n, keywords_n):
+    def __init__(self, case, title_n, abstract_n = 0, keywords_n = 0):
         self.case = case
         self.title_n = title_n
         self.abstract_n = abstract_n

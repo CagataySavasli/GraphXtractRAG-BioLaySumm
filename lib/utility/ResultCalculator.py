@@ -13,7 +13,7 @@ nltk.download('punkt')
 class ResultCalculator:
 
     def __init__(self):
-        self.biolaysumm_24 = pd.read_csv('/Users/cagatay/Desktop/CS/Projects/BioLaySumm-BiOzU/src/dataset/biolaysumm_24.csv')
+        self.biolaysumm_24 = pd.read_csv('./dataset/biolaysumm_24.csv')
 
         self.lambdas = {
             'ROUGE1': 0.2,
@@ -41,7 +41,7 @@ class ResultCalculator:
         return np.mean(bart_scorer.score(srcs, preds))
     def calc_bertscore(self, preds, refs):
         # Get BERTScore F1 scores
-        P, R, F1 = score(preds, refs, lang="en", verbose=True)
+        P, R, F1 = score(preds, refs, lang="en", verbose=False)
         return np.mean(F1.tolist())
 
 

@@ -1,11 +1,12 @@
-from src.prompt_factories.FewShotPromptFactory import FewShotPromptFactory
-from src.prompt_factories.ZeroShotPromptFactory import ZeroShotPromptFactory
-from src.prompt_factories.ZeroShotPerformanceAnalyzerPromptFactory import ZeroShotPerformanceAnalyzerFactory
-
+from lib.prompt_factories.FewShotPromptFactory import FewShotPromptFactory
+from lib.prompt_factories.ZeroShotPromptFactory import ZeroShotPromptFactory
+from lib.prompt_factories.ZeroShotPerformanceAnalyzerPromptFactory import ZeroShotPerformanceAnalyzerFactory
+from lib.utility.CaseBuilder import CaseBuilder
 
 class PromptFactory:
-    def __init__(self, case_builder, row=None, ref_rows=None):
-        strategy = case_builder.massage_strategy
+    def __init__(self, row=None, ref_rows=None):
+        self.case_builder = CaseBuilder()
+        strategy = self.case_builder.massage_strategy
         self.factory = self.build_factory(strategy, row, ref_rows)
 
     def build_factory(self, strategy, row, ref_rows):

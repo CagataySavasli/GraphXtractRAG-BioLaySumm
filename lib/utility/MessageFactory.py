@@ -1,17 +1,16 @@
-from src.prompt_factories.PromptFactory import PromptFactory
-from src.rag_factories.RAG_Factory import RAG_Factory
+from lib.prompt_factories.PromptFactory import PromptFactory
+from lib.rag_factories.RAG_Factory import RAG_Factory
+
+from lib.utility.CaseBuilder import CaseBuilder
+
 import pandas as pd
 
 
 class MessageFactory:
-    def __init__(self, case_builder, n, n_2=None, n_3=None):
-        self.case_builder = case_builder
-        self.n = n
-        self.n_2 = n_2
-        self.n_3 = n_3
+    def __init__(self):
 
-        self.prompt_generator = PromptFactory(self.case_builder)
-        self.rag_calculator = RAG_Factory(self.case_builder, self.n, self.n_2, self.n_3)
+        self.prompt_generator = PromptFactory()
+        self.rag_calculator = RAG_Factory()
 
     def prepare_case(self, row: pd.Series):
         self.rag_calculator.set_row(row)

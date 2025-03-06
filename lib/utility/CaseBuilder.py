@@ -19,12 +19,20 @@ class CaseBuilder(metaclass=SingletonMeta):
     # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     device = torch.device('cpu')
 
-    def __init__(self, genai_version, bert_version, massage_strategy, rag_strategy, rag_case, dataset_name):
+    def __init__(self, genai_version: str = "Gemini",
+                 bert_version: str = "BiBERT",
+                 massage_strategy: str = "zero_shot_performance_analyzer",
+                 rag_strategy: str = "GESRAG",
+                 rag_case: str = "top",
+                 rag_n: int = 10,
+                 dataset_name: str = "elife"):
+
         self.genai_version = genai_version
         self.bert_version = bert_version
         self.massage_strategy = massage_strategy
         self.rag_strategy = rag_strategy
         self.rag_case = rag_case
+        self.rag_n = rag_n
         self.dataset_name = dataset_name
 
         if bert_version == 'BioBERT':
