@@ -1,0 +1,105 @@
+[
+    {
+      "cluster_value": 0,
+      "name": "Title",
+      "filter": [
+        "title"
+      ]
+    },
+    {
+      "cluster_value": 1,
+      "name": "Abstract",
+      "filter": [
+        "abstract"
+      ]
+    },
+    {
+      "cluster_value": 2,
+      "name": "Introduction",
+      "filter": [
+        "introduction",
+        "1 introduction"
+      ]
+    },
+    {
+      "cluster_value": 3,
+      "name": "Results",
+      "filter": [
+        "result",
+        "result and discussion",
+        "result / discussion",
+        "result of numerical simulation",
+        "result of mathematical analysi",
+        "hypothesi and result",
+        "main text"
+      ]
+    },
+    {
+      "cluster_value": 4,
+      "name": "Discussion",
+      "filter": [
+        "discussion",
+        "discussion and conclusion",
+        "5 discussion"
+      ]
+    },
+    {
+      "cluster_value": 5,
+      "name": "Materials and Methods",
+      "filter": [
+        "material and method",
+        "material & method",
+        "material and mmethod",
+        "method",
+        "method and material",
+        "computational method",
+        "experimental procedure",
+        "technology and method",
+        "supplementary method",
+        "supplemental information",
+        "m",
+        "method, material, and result"
+      ]
+    },
+    {
+      "cluster_value": 6,
+      "name": "Modeling and Analytical Approaches",
+      "filter": [
+        "model",
+        "mathematical model",
+        "modeling framework",
+        "model development",
+        "set - up of the quorum - sensing model",
+        "smoothnes and the neural code",
+        "deep learning network",
+        "analysi"
+      ]
+    },
+    {
+      "cluster_value": 7,
+      "name": "Other / Domain Specific",
+      "filter": [
+        "clinical observation",
+        "bradykinin - induced local pulmonary angioedema",
+        "targeted treatment and timing of intervention",
+        "acknowledgment",
+        "ethic statement",
+        "accession number",
+        "accession code",
+        "note in proof",
+        "statistical analysi",
+        "description",
+        "differential diagnosi",
+        "theory",
+        "experimental background",
+        "theoretical framework",
+        "bacterial swarm",
+        "bacterial film",
+        "database deposition",
+        "building the stimulu space",
+        "phosphorylation of usp14 regulate global protein degradation",
+        "description of resource",
+        "result and conclusion"
+      ]
+    }
+]
