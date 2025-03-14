@@ -18,7 +18,7 @@ class DatasetGenerator:
         self.inflect_engine = inflect.engine()
 
         # Load header clusters and precompute a filter dictionary for clustering headings
-        self.header_clusters = pd.read_json('src/dataset/header_clusters.json')
+        self.header_clusters = pd.read_json('./dataset/header_clusters.json')
         self._header_cluster_length = len(self.header_clusters)
         self._filter_dict = self._build_filter_dict()
 
