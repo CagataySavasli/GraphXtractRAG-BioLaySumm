@@ -18,7 +18,7 @@ case_builder = CaseBuilder(genai_type, bert_model, message_type, rag_type, rag_s
 # Load the dataset
 df = pd.read_json(f'dataset/raw/{dataset}/{dataset_info}.json')
 
-dataset_generator = DatasetGenerator(case_builder)
+dataset_generator = DatasetGenerator()
 dataset_generator.set_data(df)
 dataset_generator.preprocess()
 data = dataset_generator.get_data()
