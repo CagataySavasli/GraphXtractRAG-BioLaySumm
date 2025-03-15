@@ -4,10 +4,11 @@ from lib.utility.CaseBuilder import CaseBuilder
 
 import google.generativeai as genai
 
+from tqdm import tqdm
 import pandas as pd
 import time
 
-genai.configure(api_key="") # Write Your Gemini API Key
+genai.configure(api_key="")  # Write Your Gemini API Key
 
 
 class GeminiGYM:
@@ -22,6 +23,7 @@ class GeminiGYM:
         self.test_data = None
 
         self.base_model = self.case_builder.genai_model_name
+        self.genai_model = None
 
         self.y_true = None
         self.y_pred = None
@@ -64,32 +66,32 @@ class GeminiGYM:
 
         self.result = operation.result()
 
+        self.genai_model = genai.GenerativeModel(self.result.name)
+
     def evaluate(self):
         massage_factory = MessageFactory()
 
-        test_messages = []
-        for _, row in self.test_data.iterrows():
+        test_results = {
+            "true": [],
+            "pred": []
+        }
+        for _, row in tqdm(self.test_data.iterrows(), total=len(self.test_data), desc="Test Process"):
             message = massage_factory.create_message(row)
-            test_messages.append(message)
 
-        operation = genai.evaluate_model(
-            model=self.result.name,
-            test_data=test_messages
-        )
+            prompt = message["text_input"]
+            label = message["output"]
 
-        for status in operation.wait_bar():
-            time.sleep(5)
+            answer = self.generate_summary(prompt)
 
-        self.result = operation.result()
+            test_results["true"].append(label)
+            test_results["pred"].append(answer)
 
-        self.y_true = [message["output"] for message in test_messages]
-        self.y_pred = [message["output"] for message in self.result.messages]
+        return test_results
 
     def update_model(self):
         self.base_model = self.result.name
 
-
-    def generate_summary(self, row: pd.Series, max_retries: int = 3, retry_delay: float = 5.0) -> str:
+    def generate_summary(self, prompt_text: str, max_retries: int = 3, retry_delay: float = 5.0) -> str:
         """
         Generates a lay summary using the Gemini AI model.
         Includes automatic retries in case of API failures.
@@ -104,10 +106,6 @@ class GeminiGYM:
         """
         for attempt in range(1, max_retries + 1):
             try:
-                # Generate prompt from input data
-                self.prompt_factory.set_row(row)
-                prompt_text = self.prompt_factory.get_prompt()
-
                 # Request AI model to generate content
                 response = self.genai_model.generate_content(prompt_text)
 
@@ -122,9 +120,9 @@ class GeminiGYM:
                     print("Maximum retries reached. Returning None.")
                     return ""
 
-                if attempt % 2 == 0:
-                    # Initialize the Generative AI model
-                    self.reset_generaoi_model()
+                # if attempt % 2 == 0:
+                #     # Initialize the Generative AI model
+                #     self.reset_generaoi_model()
 
                 # Wait before retrying the request
                 time.sleep(retry_delay)
@@ -146,5 +144,3 @@ class GeminiGYM:
             return response_text.split("**Lay Summary:**")[1].strip()
         else:
             return response_text.strip()
-
-
