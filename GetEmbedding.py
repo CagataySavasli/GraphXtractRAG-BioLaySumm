@@ -24,4 +24,4 @@ dataset_generator.preprocess()
 data = dataset_generator.get_data()
 
 print(df.shape, data.shape)
-data.to_json(f'src/dataset/processed/{dataset}/{dataset_info}.json')
+data.to_json(f'dataset/processed/{dataset}/{dataset_info}.json')
