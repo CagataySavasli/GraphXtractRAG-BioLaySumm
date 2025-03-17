@@ -69,7 +69,7 @@ class SelectorGYM():
             print("Initialize selector model saved.")
 
         # Initialize the optimizer
-        self.optimizer = optim.Adam(self.selector.parameters(), lr=0.01)
+        self.optimizer = optim.Adam(self.selector.parameters(), lr=0.005)
 
         # Initialize the Generative AI model
         #self.genai_model_name = genai_model_name

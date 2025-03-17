@@ -19,7 +19,7 @@ class AlternatingTraining:
                     display_name=f"gemini_finetune_mix_epoch_{epoch}",
                     epoch_count=iter_epoch,
                     batch_size=8,  # Adjust batch size as needed
-                    learning_rate=5e-5  # Adjust learning rate as needed
+                    learning_rate=5e-4  # Adjust learning rate as needed
                 )
                 self.gemini_gym.update_model()
 
