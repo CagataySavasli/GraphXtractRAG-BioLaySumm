@@ -21,7 +21,7 @@ gemini_gym = GeminiGYM()
 gemini_gym.set_train_data(df_train.copy())
 #%%
 gemini_gym.fine_tune(display_name=rag_strategy,
-                     epoch_count=1,
+                     epoch_count=20,
                      batch_size=8,
                      learning_rate=5e-4)
 #%%
