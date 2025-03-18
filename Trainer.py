@@ -11,11 +11,8 @@ rag_strategy = sys.argv[1] #"similarityRAG"
 case_builder = CaseBuilder(rag_strategy=rag_strategy)
 result_calculator = ResultCalculator()
 #%%
-# Load dataset and split
-df = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/val.json')
-df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
-df_train = df_train.reset_index(drop=True)
-df_test = df_test.reset_index(drop=True)
+df_train = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/train.json').reset_index(drop=True)
+df_test = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/test.json').reset_index(drop=True)
 #%%
 gemini_gym = GeminiGYM()
 gemini_gym.set_train_data(df_train.copy())
