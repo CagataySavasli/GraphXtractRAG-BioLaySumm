@@ -71,6 +71,6 @@
 Clone the repository and install the required dependencies:
 
 ```bash
-git clone https://github.com/your-username/BioLaySumm-BiOzU.git
+git clone https://github.com/CagataySavasli/GraphXtractRAG-BioLaySumm.git
 cd BioLaySumm-BiOzU
 poetry install
