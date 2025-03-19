@@ -7,7 +7,7 @@ class GESRAG(AbstractRAG_Factory):
     def __init__(self, n):
         print("GESRAG Factory")
         self.model = MIXSelector(770, 128)
-        self.model.load_state_dict(torch.load("./outputs/models/MIX_20_selector.pth", weights_only=True))
+        self.model.load_state_dict(torch.load(f"./outputs/models/MIX_{n}_selector.pth", weights_only=True))
         self.model.eval()
 
         self.n =n
