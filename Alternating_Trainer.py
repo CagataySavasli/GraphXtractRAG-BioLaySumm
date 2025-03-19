@@ -11,15 +11,11 @@ import google.generativeai as genai
 case_builder = CaseBuilder()
 result_calculator = ResultCalculator()
 #%%
-# Load dataset and split
-df = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/val.json')
-df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
-df_train = df_train.reset_index(drop=True)
-df_test = df_test.reset_index(drop=True)
-#%%
-df_train.head()
-#%%
-len(df_train.loc[0, 'sections_embedding'][0][0])
+print("Dataset Name: ", case_builder.dataset_name)
+df_train = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/train.json').reset_index(drop=True)
+df_test = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/test.json').reset_index(drop=True)
+print("Train Shape: ", df_train.shape)
+print("Test Shape: ", df_test.shape)
 #%%
 # Initialize SelectorGYM and GeminiGYM
 selector_gym = SelectorGYM("MIX", df_train.copy(), df_test.copy())
