@@ -20,9 +20,9 @@ class CaseBuilder(metaclass=SingletonMeta):
     device = torch.device('cpu')
 
     def __init__(self, genai_version: str = "Gemini",
-                 bert_version: str = "BiBERT",
-                 massage_strategy: str = "zero_shot_performance_analyzer",
-                 rag_strategy: str = "GESRAG",
+                 bert_version: str = "BioBERT",
+                 massage_strategy: str = "lay_summary",
+                 rag_strategy: str = "graphxtract",
                  rag_case: str = "top",
                  rag_n: int = 10,
                  dataset_name: str = "elife"):

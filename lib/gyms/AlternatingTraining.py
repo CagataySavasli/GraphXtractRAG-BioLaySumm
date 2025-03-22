@@ -16,7 +16,7 @@ class AlternatingTraining:
             if epoch % 2 == 0:
                 print("Fine-tuning GeminiGYM...")
                 self.gemini_gym.fine_tune(
-                    display_name=f"gemini_finetune_mix_epoch_{epoch}",
+                    display_name=f"graphxtractrag_{epoch}",
                     epoch_count=iter_epoch,
                     batch_size=8,  # Adjust batch size as needed
                     learning_rate=5e-4  # Adjust learning rate as needed
