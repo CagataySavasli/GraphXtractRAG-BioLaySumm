@@ -3,7 +3,8 @@ from lib.selectors.MIXSelector import MIXSelector
 from lib.utility.GraphGenerator import GraphGenerator
 import torch
 import torch.nn.functional as F
-class GESRAG(AbstractRAG_Factory):
+
+class GraphXtractRAG(AbstractRAG_Factory):
     def __init__(self, n):
         print("GESRAG Factory")
         self.model = MIXSelector(770, 128)

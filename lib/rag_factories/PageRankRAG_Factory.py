@@ -3,8 +3,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import networkx as nx
 
-
-class GraphRAG(AbstractRAG_Factory):
+class PageRankRAG(AbstractRAG_Factory):
     def __init__(self, case, n):
         self.n = n
         self.case = case

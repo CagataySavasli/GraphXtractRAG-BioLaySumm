@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-class RAG(AbstractRAG_Factory):
+class SimilarityRAG(AbstractRAG_Factory):
 
     def __init__(self, case, title_n, abstract_n = 0, keywords_n = 0):
         print("SimilarityRAG Factory")

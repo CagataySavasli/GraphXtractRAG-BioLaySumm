@@ -1,10 +1,10 @@
-from lib.rag_factories.GraphRAG_Factory import GraphRAG
-from lib.rag_factories.SimilarityRAG_Factory import RAG
-from lib.rag_factories.PersonalizationGraphRAG import PersonalizationGraphRAG
+from lib.rag_factories.SimilarityRAG_Factory import SimilarityRAG
+from lib.rag_factories.PageRankRAG_Factory import PageRankRAG
+from lib.rag_factories.PersonalizationPageRankRAG_Factory import PersonalizationPageRankRAG
+from lib.rag_factories.GraphXtractRAG_Factory import GraphXtractRAG
 
 from lib.utility.CaseBuilder import CaseBuilder
 
-from lib.rag_factories.GESRAG_Factory import GESRAG
 import pandas as pd
 
 
@@ -18,14 +18,14 @@ class RAG_Factory:
         self.factory = self.build_factory()
 
     def build_factory(self):
-        if self.strategy == "similarityRAG":
-            return RAG(self.case, self.n)
-        elif self.strategy == "graphRAG":
-            return GraphRAG(self.case, self.n)
-        elif self.strategy == "personalizationGraphRAG":
-            return PersonalizationGraphRAG(self.case, self.n)
-        elif self.strategy == "GESRAG":
-            return GESRAG(self.n)
+        if self.strategy == "similarity":
+            return SimilarityRAG(self.case, self.n)
+        elif self.strategy == "pagerank":
+            return PageRankRAG(self.case, self.n)
+        elif self.strategy == "per_pagerank":
+            return PersonalizationPageRankRAG(self.case, self.n)
+        elif self.strategy == "graphxtract":
+            return GraphXtractRAG(self.n)
         else:
             raise ValueError("Unsupported RAG strategy")
 
