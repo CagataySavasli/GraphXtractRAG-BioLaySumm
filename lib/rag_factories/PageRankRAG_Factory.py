@@ -5,6 +5,8 @@ import networkx as nx
 
 class PageRankRAG(AbstractRAG_Factory):
     def __init__(self, case, n):
+        print("PageRankRAG Factory")
+
         self.n = n
         self.case = case
         self.row = None

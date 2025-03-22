@@ -7,6 +7,7 @@ class SimilarityRAG(AbstractRAG_Factory):
 
     def __init__(self, case, title_n, abstract_n = 0, keywords_n = 0):
         print("SimilarityRAG Factory")
+
         self.case = case
         self.title_n = title_n
         self.abstract_n = abstract_n
