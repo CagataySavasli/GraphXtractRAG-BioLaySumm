@@ -1,7 +1,7 @@
 from lib.prompt_factories.AbstractPromptFactory import AbstractPromptFactory
 
 
-class ZeroShotPerformanceAnalyzerFactory(AbstractPromptFactory):
+class LaySummaryPromptFactory(AbstractPromptFactory):
     def __init__(self, row=None):
         super().__init__(row=row)
 

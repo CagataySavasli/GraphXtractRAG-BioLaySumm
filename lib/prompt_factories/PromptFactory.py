@@ -1,6 +1,6 @@
 from lib.prompt_factories.FewShotPromptFactory import FewShotPromptFactory
 from lib.prompt_factories.ZeroShotPromptFactory import ZeroShotPromptFactory
-from lib.prompt_factories.ZeroShotPerformanceAnalyzerPromptFactory import ZeroShotPerformanceAnalyzerFactory
+from lib.prompt_factories.LaySummaryPromptFactory import LaySummaryPromptFactory
 from lib.utility.CaseBuilder import CaseBuilder
 
 class PromptFactory:
@@ -14,8 +14,8 @@ class PromptFactory:
             return FewShotPromptFactory(row, ref_rows)
         elif strategy == "zero_shot":
             return ZeroShotPromptFactory(row)
-        elif strategy == "zero_shot_performance_analyzer":
-            return ZeroShotPerformanceAnalyzerFactory(row)
+        elif strategy == "lay_summary":
+            return LaySummaryPromptFactory(row)
         else:
             raise ValueError("Unsupported prompt strategy")
 
