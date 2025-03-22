@@ -64,10 +64,6 @@ class SelectorGYM():
 
         self.selector_path = f"./outputs/models/{selector_type}_{self.n_select}_selector.pth"
 
-        if not  os.path.exists(self.selector_path):
-            torch.save(self.selector.state_dict(), self.selector_path)
-            print("Initialize selector model saved.")
-
         # Initialize the optimizer
         self.optimizer = optim.Adam(self.selector.parameters(), lr=0.005)
 
@@ -104,6 +100,11 @@ class SelectorGYM():
         self.test_error_count = 0
         self.train_error_count = 0
         self.reset_generaoi_model()
+
+    def check_save(self):
+        if not  os.path.exists(self.selector_path):
+            torch.save(self.selector.state_dict(), self.selector_path)
+            print("Initialize selector model saved.")
 
     def reset_generaoi_model(self):
         """

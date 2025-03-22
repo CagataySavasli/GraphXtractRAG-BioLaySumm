@@ -10,6 +10,7 @@ import google.generativeai as genai
 #%%
 case_builder = CaseBuilder()
 result_calculator = ResultCalculator()
+selector_strategy = "MIX"
 #%%
 print("Dataset Name: ", case_builder.dataset_name)
 df_train = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/train.json').reset_index(drop=True)
@@ -18,7 +19,8 @@ print("Train Shape: ", df_train.shape)
 print("Test Shape: ", df_test.shape)
 #%%
 # Initialize SelectorGYM and GeminiGYM
-selector_gym = SelectorGYM("MIX", df_train.copy(), df_test.copy())
+selector_gym = SelectorGYM(selector_strategy, df_train.copy(), df_test.copy())
+selector_gym.check_save()
 gemini_gym = GeminiGYM()
 gemini_gym.set_train_data(df_train.copy())
 #%%
