@@ -13,8 +13,8 @@ bert_model = 'BioBERT'
 dataset = sys.argv[1]
 dataset_info = sys.argv[2]
 
-lower_bound = int(sys.argv[4])
-upper_bound = int(sys.argv[3])
+lower_bound = int(sys.argv[3])
+upper_bound = int(sys.argv[4])
 
 
 case_builder = CaseBuilder(genai_type, bert_model, message_type, rag_type, rag_strategy, dataset)
