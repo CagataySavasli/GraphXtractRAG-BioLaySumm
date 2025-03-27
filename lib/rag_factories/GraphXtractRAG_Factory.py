@@ -24,21 +24,39 @@ class GraphXtractRAG(AbstractRAG_Factory):
         self.graph_generator.set_row(row)
         self.sentences = self.graph_generator.get_sentences()
 
-    def select_sentences(self, data):
+    # def select_sentences(self, data):
+    #
+    #     with torch.no_grad():
+    #         logits = self.model(data.x, data.edge_index)  # shape: [num_nodes]
+    #
+    #         # Adım 2: Logit'leri softmax ile olasılığa dönüştürüyoruz.
+    #         probs = F.softmax(logits, dim=0)  # shape: [num_nodes]
+    #
+    #         # Adım 3: Olasılık dağılımından n düğümü örnekliyoruz.
+    #         node_indices = torch.multinomial(probs, self.n, replacement=False)
+    #
+    #         # Adım 4: Seçilen düğümlerin log olasılıklarının toplamı hesaplanır.
+    #         selected_log_probs = torch.log(probs[node_indices]).sum()
+    #
+    #         # Adım 5: Seçilen düğümlere ait cümleleri birleştirip prompt oluşturuyoruz.
+    #         selected_sentences = [self.sentences[i] for i in node_indices.tolist()]
+    #
+    #     return selected_sentences
 
+    def select_sentences(self, data):
         with torch.no_grad():
             logits = self.model(data.x, data.edge_index)  # shape: [num_nodes]
 
-            # Adım 2: Logit'leri softmax ile olasılığa dönüştürüyoruz.
+            # Logit'leri softmax ile olasılığa dönüştürüyoruz.
             probs = F.softmax(logits, dim=0)  # shape: [num_nodes]
 
-            # Adım 3: Olasılık dağılımından n düğümü örnekliyoruz.
-            node_indices = torch.multinomial(probs, self.n, replacement=False)
+            # Olasılık dağılımına göre en yüksek self.n değeri seçiliyor.
+            topk_probs, node_indices = torch.topk(probs, self.n)
 
-            # Adım 4: Seçilen düğümlerin log olasılıklarının toplamı hesaplanır.
-            selected_log_probs = torch.log(probs[node_indices]).sum()
+            # Seçilen düğümlerin log olasılıklarının toplamı hesaplanır.
+            #selected_log_probs = torch.log(topk_probs).sum()
 
-            # Adım 5: Seçilen düğümlere ait cümleleri birleştirip prompt oluşturuyoruz.
+            # Seçilen düğümlere ait cümleleri alıyoruz.
             selected_sentences = [self.sentences[i] for i in node_indices.tolist()]
 
         return selected_sentences
