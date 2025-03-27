@@ -22,7 +22,7 @@ case_builder = CaseBuilder(genai_type, bert_model, message_type, rag_type, rag_s
 # Load the dataset
 df = pd.read_json(f'dataset/raw/{dataset}/{dataset_info}.json')
 
-df = df[lower_bound:upper_bound].copy()
+df = df.loc[lower_bound:upper_bound].copy()
 
 dataset_generator = DatasetGenerator()
 dataset_generator.set_data(df)
