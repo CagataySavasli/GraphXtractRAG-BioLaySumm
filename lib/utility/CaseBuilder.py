@@ -25,6 +25,8 @@ class CaseBuilder(metaclass=SingletonMeta):
                  rag_strategy: str = "graphxtract",
                  rag_case: str = "top",
                  rag_n: int = 10,
+                 lr: float = 5e-4,
+                 batch_size: int = 8,
                  dataset_name: str = "elife"):
 
         self.genai_version = genai_version
@@ -34,6 +36,8 @@ class CaseBuilder(metaclass=SingletonMeta):
         self.rag_case = rag_case
         self.rag_n = rag_n
         self.dataset_name = dataset_name
+        self.lr = lr
+        self.batch_size = batch_size
 
         if bert_version == 'BioBERT':
             self.bert_model_name = 'dmis-lab/biobert-base-cased-v1.2'

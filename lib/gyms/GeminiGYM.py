@@ -8,7 +8,7 @@ from tqdm import tqdm
 import pandas as pd
 import time
 
-genai.configure(api_key="")  # Write Your Gemini API Key
+genai.configure(api_key="AIzaSyC42OyqZc03g56rzaoC4JkDV9dt7TZ49ic")  # Write Your Gemini API Key
 
 
 class GeminiGYM:
@@ -16,7 +16,6 @@ class GeminiGYM:
         self.case_builder = CaseBuilder()
         self.n = self.case_builder.rag_n
 
-        #self.massage_factory = MessageFactory(self.case_builder, n, n_2, n_3)
         self.result_calculater = ResultCalculator()
 
         self.train_data = None
@@ -48,7 +47,7 @@ class GeminiGYM:
             train_messages.append(message)
         return train_messages
 
-    def fine_tune(self, display_name, epoch_count, batch_size, learning_rate):
+    def fine_tune(self, display_name, epoch_count):
         train_messages = self.get_messages()
 
         operation = genai.create_tuned_model(
@@ -56,8 +55,8 @@ class GeminiGYM:
             display_name=display_name,
             source_model=self.base_model,
             epoch_count=epoch_count,
-            batch_size=batch_size,
-            learning_rate=learning_rate,
+            batch_size=self.case_builder.batch_size,
+            learning_rate=self.case_builder.lr,
             training_data=train_messages
         )
 
