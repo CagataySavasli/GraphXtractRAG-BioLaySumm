@@ -17,9 +17,7 @@ class AlternatingTraining:
                 print("Fine-tuning GeminiGYM...")
                 self.gemini_gym.fine_tune(
                     display_name=f"graphxtractrag_{epoch}",
-                    epoch_count=iter_epoch,
-                    batch_size=8,  # Adjust batch size as needed
-                    learning_rate=5e-4  # Adjust learning rate as needed
+                    epoch_count=iter_epoch
                 )
                 self.gemini_gym.update_model()
 
@@ -32,10 +30,8 @@ class AlternatingTraining:
             self.update_models(epoch)
 
         self.gemini_gym.fine_tune(
-            display_name=f"gemini_finetune_mix_last",
-            epoch_count=5,
-            batch_size=8,  # Adjust batch size as needed
-            learning_rate=5e-5  # Adjust learning rate as needed
+            display_name=f"graphxtractrag_final",
+            epoch_count=5
         )
         self.gemini_gym.update_model()
     def update_models(self, epoch):
