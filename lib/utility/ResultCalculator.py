@@ -85,8 +85,9 @@ class ResultCalculator:
         return (value - min_val) / (max_val - min_val)
 
     def reward_function(self, pred, ref):
-        pred = [pred]
-        ref = [ref]
+        if type(pred) == str:
+            pred = [pred]
+            ref = [ref]
 
         scores = self.evaluate(pred, ref)
 
