@@ -65,7 +65,7 @@ class SelectorGYM():
         self.selector_path = f"./outputs/models/{selector_type}_{self.n_select}_selector.pth"
 
         # Initialize the optimizer
-        self.optimizer = optim.Adam(self.selector.parameters(), lr=0.005)
+        self.optimizer = optim.Adam(self.selector.parameters(), lr=self.case_builder.lr)
 
         # Initialize the Generative AI model
         #self.genai_model_name = genai_model_name
@@ -230,7 +230,7 @@ class SelectorGYM():
         """
 
         self.selector.train()
-        self.optimizer.zero_grad()
+        #self.optimizer.zero_grad()
 
         data, sentences = self.get_graphs(row)
         reference_summary = row['summary']
@@ -259,8 +259,8 @@ class SelectorGYM():
         if not generated_summary == "":
             loss = self.compute_rl_loss(selected_log_probs, generated_summary, reference_summary)
 
-            loss.backward()
-            self.optimizer.step()
+            # loss.backward()
+            # self.optimizer.step()
         else:
             self.train_error_count += 1
             loss = torch.tensor(0.0)
@@ -326,15 +326,32 @@ class SelectorGYM():
             train_loss = 0.0
             num_success = 0
 
+            batch_loss = 0.0
+            batch_success = 0
+
             for idx, row in self.df_train.iterrows():
-                loss = self.train_step(row)
-                train_loss += loss
-                if loss > 0:
+
+                if idx % self.case_builder.batch_size == 0:
+                    self.optimizer.zero_grad()
+
+                step_loss = self.train_step(row)
+                train_loss += step_loss
+                batch_loss += step_loss
+
+                if step_loss > 0:
                     num_success += 1
-                if idx % 2 == 0 or idx == len(self.df_train) - 1:
+                    batch_success += 1
+                if (idx + 1) % self.case_builder.batch_size == 0 or idx == len(self.df_train) - 1:
                     print(
-                        f"\rEpoch {epoch + 1}/{n_epochs} | Process {idx + 1}/{len(self.df_train)} - {round(((idx + 1) / len(self.df_train) * 100), 2)}% | Loss: {loss:.4f} | Error Count: {self.train_error_count}", end=" "
+                        f"\rEpoch {epoch + 1}/{n_epochs} | Process {idx + 1}/{len(self.df_train)} - {round(((idx + 1) / len(self.df_train) * 100), 2)}% | Loss: {step_loss:.4f} | Error Count: {self.train_error_count}", end=" "
                         )
+                    batch_loss /= batch_success
+
+                    batch_loss.backward()
+                    self.optimizer.step()
+
+                    batch_loss = 0.0
+                    batch_success = 0
             avg_train_loss = train_loss / num_success
             self.train_loss_history.append(avg_train_loss)
             print(f"\nEpoch {epoch + 1} Completed| Avg Train Loss: {avg_train_loss}")
