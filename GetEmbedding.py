@@ -3,23 +3,16 @@ from lib.utility.CaseBuilder import CaseBuilder
 import sys
 import pandas as pd
 
-# Initialize case builder and prompt factory
-genai_type = "Gemini"
-message_type = "zero_shot_performance_analyzer"
-rag_type = "GESRAG"
-rag_strategy = "bottom"
-bert_model = 'BioBERT'
+dataset = sys.argv[1] # Used dataset name: ['elife', 'plos']
+dataset_info = sys.argv[2] # Used dataset info: ['train', 'val', 'test']
 
-dataset = sys.argv[1]
-dataset_info = sys.argv[2]
-
+# Lower and upper bound for the dataset to parallelize the process.
 lower_bound = int(sys.argv[3])
 upper_bound = int(sys.argv[4])
 
 
-case_builder = CaseBuilder(genai_type, bert_model, message_type, rag_type, rag_strategy, dataset)
+case_builder = CaseBuilder(dataset_name=dataset)
 
-# Load the dataset
 df = pd.read_json(f'dataset/raw/{dataset}/{dataset_info}.json')
 
 df = df.loc[lower_bound:upper_bound].copy()
