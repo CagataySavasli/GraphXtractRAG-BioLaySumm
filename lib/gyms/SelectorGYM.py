@@ -330,10 +330,6 @@ class SelectorGYM():
             batch_success = 0
 
             for idx, row in self.df_train.iterrows():
-
-                if idx % self.case_builder.batch_size == 0:
-                    self.optimizer.zero_grad()
-
                 step_loss = self.train_step(row)
                 train_loss += step_loss
                 batch_loss += step_loss
@@ -342,13 +338,16 @@ class SelectorGYM():
                     num_success += 1
                     batch_success += 1
                 if (idx + 1) % self.case_builder.batch_size == 0 or idx == len(self.df_train) - 1:
-                    print(
-                        f"\rEpoch {epoch + 1}/{n_epochs} | Process {idx + 1}/{len(self.df_train)} - {round(((idx + 1) / len(self.df_train) * 100), 2)}% | Loss: {step_loss:.4f} | Error Count: {self.train_error_count}", end=" "
-                        )
                     batch_loss /= batch_success
 
+                    self.optimizer.zero_grad()
                     batch_loss.backward()
                     self.optimizer.step()
+
+
+                    print(
+                        f"\rEpoch {epoch + 1}/{n_epochs} | Process {idx + 1}/{len(self.df_train)} - {round(((idx + 1) / len(self.df_train) * 100), 2)}% | Loss: {batch_loss:.4f} | Error Count: {self.train_error_count}", end=" "
+                        )
 
                     batch_loss = 0.0
                     batch_success = 0
