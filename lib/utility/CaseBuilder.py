@@ -26,7 +26,7 @@ class CaseBuilder(metaclass=SingletonMeta):
                  rag_case: str = "top",
                  rag_n: int = 10,
                  lr: float = 5e-4,
-                 batch_size: int = 8,
+                 batch_size: int = 16,
                  dataset_name: str = "elife"):
 
         self.genai_version = genai_version
