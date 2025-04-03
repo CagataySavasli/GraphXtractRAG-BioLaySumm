@@ -41,9 +41,9 @@ score_dict = result_calculator.evaluate(predicted, actual)
 print("Score Calculated")
 #%%
 generated_text_df = pd.DataFrame({'generated': predicted, 'actual': actual})
-generated_text_df.to_csv(f'outputs/generated_texts/{case_builder.rag_strategy}_{case_builder.rag_n}_{case_builder.dataset_name}_genrated_text.csv', index=False)
+generated_text_df.to_csv(f'outputs/generated_texts/{display_name}_genrated_text.csv', index=False)
 score_df = pd.DataFrame([score_dict])
-score_df.to_csv(f'outputs/scores/{case_builder.rag_strategy}_{case_builder.rag_n}_{case_builder.dataset_name}_score.csv', index=False)
+score_df.to_csv(f'outputs/scores/{display_name}_score.csv', index=False)
 print("Results Saved")
 #%%
 result_calculator.display_rank(score_dict)
