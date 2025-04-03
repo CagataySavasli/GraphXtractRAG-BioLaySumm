@@ -18,10 +18,10 @@ class ResultCalculator:
         self.lambdas = {
             'ROUGE1': 0.2,
             'ROUGE2': 0.1,
-            'ROUGEL': 0.4,
-            'BERTScore': 0.3,
-            'FKGL': -0.2,
-            'DCRS': -0.2,
+            'ROUGEL': 0.3,
+            'BERTScore': 0.4,
+            'FKGL': -0.05,
+            'DCRS': -0.05,
             'CLI': 0.0,
             #'BARTScore': 0.3
         }
