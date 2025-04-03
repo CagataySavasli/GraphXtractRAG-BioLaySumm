@@ -4,6 +4,7 @@ from lib.utility.CaseBuilder import CaseBuilder
 from lib.utility.ResultCalculator import ResultCalculator
 from sklearn.model_selection import train_test_split
 import pandas as pd
+import json
 import sys
 #%%
 rag_strategy = sys.argv[1] #"similarityRAG"
@@ -16,8 +17,21 @@ case_builder = CaseBuilder(rag_strategy=rag_strategy,
 result_calculator = ResultCalculator()
 #%%
 print("Dataset Name: ", case_builder.dataset_name)
-df_train = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/train.json').reset_index(drop=True)
-df_test = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/test.json').reset_index(drop=True)
+# df_train = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/train.json').reset_index(drop=True)
+# df_test = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/test.json').reset_index(drop=True)
+
+with open(f'dataset/processed/{case_builder.dataset_name}/train.json', 'r') as f:
+    data = json.load(f)
+
+df_train = pd.DataFrame(data).reset_index(drop=True)
+del(data)
+
+with open(f'dataset/processed/{case_builder.dataset_name}/test.json', 'r') as f:
+    data = json.load(f)
+df_test = pd.DataFrame(data).reset_index(drop=True)
+del(data)
+
+
 print("Train Shape: ", df_train.shape)
 print("Test Shape: ", df_test.shape)
 #%%
