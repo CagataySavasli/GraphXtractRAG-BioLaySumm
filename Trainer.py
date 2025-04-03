@@ -22,7 +22,8 @@ gemini_gym = GeminiGYM()
 gemini_gym.set_train_data(df_train.copy())
 print("GeminiGYM Created")
 #%%
-gemini_gym.fine_tune(display_name=rag_strategy,
+display_name = f"{case_builder.rag_strategy}_{case_builder.dataset_name}"
+gemini_gym.fine_tune(display_name=display_name,
                      epoch_count=20)
 print("Fine Tuning Completed")
 #%%
