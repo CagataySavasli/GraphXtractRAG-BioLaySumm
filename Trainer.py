@@ -17,20 +17,8 @@ case_builder = CaseBuilder(rag_strategy=rag_strategy,
 result_calculator = ResultCalculator()
 #%%
 print("Dataset Name: ", case_builder.dataset_name)
-# df_train = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/train.json').reset_index(drop=True)
-# df_test = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/test.json').reset_index(drop=True)
-
-with open(f'dataset/processed/{case_builder.dataset_name}/train.json', 'r') as f:
-    data = json.load(f)
-
-df_train = pd.DataFrame(data).reset_index(drop=True)
-del(data)
-
-with open(f'dataset/processed/{case_builder.dataset_name}/test.json', 'r') as f:
-    data = json.load(f)
-df_test = pd.DataFrame(data).reset_index(drop=True)
-del(data)
-
+df_train = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/train.json').reset_index(drop=True)
+df_test = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/test.json').reset_index(drop=True)
 
 print("Train Shape: ", df_train.shape)
 print("Test Shape: ", df_test.shape)
