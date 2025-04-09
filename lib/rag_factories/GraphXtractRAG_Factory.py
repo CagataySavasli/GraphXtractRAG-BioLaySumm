@@ -9,7 +9,7 @@ class GraphXtractRAG(AbstractRAG_Factory):
         print("GraphXtractRAG Factory")
 
         self.model = MIXSelector(770, 128)
-        self.model.load_state_dict(torch.load(f"./outputs/models/MIX_{n}_selector.pth", weights_only=True))
+        self.model.load_state_dict(torch.load(f"./outputs/models/GraphXtract_{n}_elife_selector.pth", weights_only=True))
         self.model.eval()
 
         self.n =n
