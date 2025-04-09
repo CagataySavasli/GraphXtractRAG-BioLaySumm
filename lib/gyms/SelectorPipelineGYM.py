@@ -63,7 +63,7 @@ class SelectorPipelineGYM:
         # Number of nodes to select
         self.n_select = self.case_builder.rag_n
 
-        self.selector_path = f"./outputs/models/{selector_type}_{self.n_select}_selector.pth"
+        self.selector_path = f"./outputs/models/Grap_{self.case_builder.dataset_name}_{self.n_select}_selector.pth"
 
         # Initialize the optimizer
         self.optimizer = optim.Adam(self.selector.parameters(), lr=self.case_builder.lr)
@@ -284,10 +284,13 @@ class SelectorPipelineGYM:
         print("Selector model loaded.")
 
     def plot_training_loss(self):
+        print("Plot training loss is saved.")
         plt.figure(figsize=(8, 5))
-        plt.plot(range(1, len(self.train_loss_history) + 1), self.train_loss_history, marker='o', linestyle='-')
+        loss_history = [loss.detach().numpy() for loss in self.train_loss_history]
+        plt.plot(range(1, len(loss_history) + 1), loss_history, marker='o', linestyle='-')
         plt.xlabel('Epoch')
         plt.ylabel('Average Training Loss')
         plt.title('Training Loss Over Epochs')
         plt.grid()
-        plt.show()
+        #plt.show()
+        plt.savefig(f'outputs/plots/{self.case_builder.rag_strategy}_{self.case_builder.rag_n}_{self.case_builder.dataset_name}_loss.png')
