@@ -5,3 +5,8 @@ BiOzU*
 .idea
 *.DS_Store
 *.yaml
+*.csv
+*.json
+*.sh
+*.pth
+*.png
