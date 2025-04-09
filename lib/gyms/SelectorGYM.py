@@ -62,7 +62,7 @@ class SelectorGYM():
         # Number of nodes to select
         self.n_select = self.case_builder.rag_n
 
-        self.selector_path = f"./outputs/models/{selector_type}_{self.n_select}_selector.pth"
+        self.selector_path = f"./outputs/models/GraphXtract_{self.n_select}_{self.case_builder.dataset_name}_selector.pth"
 
         # Initialize the optimizer
         self.optimizer = optim.Adam(self.selector.parameters(), lr=self.case_builder.lr)
