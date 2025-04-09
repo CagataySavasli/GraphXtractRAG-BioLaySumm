@@ -3,8 +3,19 @@ from lib.utility.CaseBuilder import CaseBuilder
 from lib.utility.ResultCalculator import ResultCalculator
 from lib.gyms.SelectorPipelineGYM import SelectorPipelineGYM
 import pandas as pd
+import sys
 #%%
-case_builder = CaseBuilder()
+dataset_name = sys.argv[1] #"elife"
+rag_n = int(sys.argv[2]) # 30
+print("Dataset Name: ", dataset_name)
+print("RAG N: ", rag_n)
+#%%
+#%%
+case_builder = CaseBuilder(
+    dataset_name=dataset_name,
+    rag_strategy="graphxtract",
+    rag_n=rag_n,
+)
 result_calculator = ResultCalculator()
 selector_strategy = "MIX"
 #%%
@@ -31,7 +42,7 @@ predicted_summaries, referance_summaries = selector_gym.test()
 score_dict = result_calculator.evaluate(predicted_summaries, referance_summaries)
 print("Score Calculated")
 #%%
-display_name = f"Selector_{case_builder.dataset_name}_{selector_strategy}"
+display_name = f"Selector_{case_builder.dataset_name}_{case_builder.rag_n}_{selector_strategy}"
 generated_text_df = pd.DataFrame({'generated': predicted_summaries, 'actual': referance_summaries})
 generated_text_df.to_csv(f'outputs/generated_texts/{display_name}_genrated_text.csv', index=False)
 score_df = pd.DataFrame([score_dict])
