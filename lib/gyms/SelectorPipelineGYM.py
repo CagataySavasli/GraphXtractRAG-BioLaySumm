@@ -132,6 +132,8 @@ class SelectorPipelineGYM:
 
 
     def get_n_sentences(self, row: pd.Series) -> Tuple[List[str], torch.Tensor]:
+        n_sentence = len([x for section in row['sections_embedding'] for x in section])
+        n = min(n_sentence, self.n_select)
 
         data, sentences = self.get_graphs(row)
 
@@ -142,7 +144,7 @@ class SelectorPipelineGYM:
         probs = F.softmax(logits, dim=0)
 
         # Sample n_select unique nodes based on the probability distribution.
-        node_indices = torch.topk(probs, self.n_select).indices
+        node_indices = torch.topk(probs, n).indices
 
         # Sum the log probabilities of the selected nodes.
         # (This is our “policy log–probability”.)
