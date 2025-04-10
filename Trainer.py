@@ -7,12 +7,14 @@ import pandas as pd
 import json
 import sys
 #%%
-rag_strategy = sys.argv[1] #"similarityRAG"
-rag_n = int(sys.argv[2]) # 30
+dataset_name = sys.argv[1] #"elife"
+rag_strategy = sys.argv[2] #"similarityRAG"
+rag_n = int(sys.argv[3]) # 30
 print("RAG Strategy: ", rag_strategy)
 print("RAG N: ", rag_n)
 #%%
-case_builder = CaseBuilder(rag_strategy=rag_strategy,
+case_builder = CaseBuilder(dataset_name=dataset_name,
+                           rag_strategy=rag_strategy,
                            rag_n=rag_n)
 result_calculator = ResultCalculator()
 #%%
