@@ -12,6 +12,7 @@ print("RAG N: ", rag_n)
 #%%
 #%%
 case_builder = CaseBuilder(
+    batch_size=8,
     dataset_name=dataset_name,
     rag_strategy="graphxtract",
     rag_n=rag_n,
