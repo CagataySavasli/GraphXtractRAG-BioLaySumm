@@ -28,7 +28,7 @@ print("Test Shape: ", df_test.shape)
 #%%
 selector_gym = SelectorPipelineGYM(selector_strategy, df_train, df_test)
 
-selector_gym.train(20)
+selector_gym.train(10)
 selector_gym.save_selector()
 selector_gym.plot_training_loss()
 
