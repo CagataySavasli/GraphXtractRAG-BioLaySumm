@@ -47,11 +47,13 @@ class GraphXtractRAG(AbstractRAG_Factory):
         with torch.no_grad():
             logits = self.model(data.x, data.edge_index)  # shape: [num_nodes]
 
+            n_sentence = min(self.n, len(data.x))
+
             # Logit'leri softmax ile olasılığa dönüştürüyoruz.
             probs = F.softmax(logits, dim=0)  # shape: [num_nodes]
 
             # Olasılık dağılımına göre en yüksek self.n değeri seçiliyor.
-            topk_probs, node_indices = torch.topk(probs, self.n)
+            topk_probs, node_indices = torch.topk(probs, n_sentence)
 
             # Seçilen düğümlerin log olasılıklarının toplamı hesaplanır.
             #selected_log_probs = torch.log(topk_probs).sum()
