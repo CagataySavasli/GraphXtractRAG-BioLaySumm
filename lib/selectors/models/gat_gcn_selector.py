@@ -4,12 +4,12 @@ import torch.nn.functional as F
 
 from torch_geometric.nn import GATConv, GCNConv
 
-class MIXSelector(nn.Module):
-    def __init__(self, in_channels: int, hidden_channels: int, heads: int = 1, dropout: float = 0.5):
+class GATGCNSelector(nn.Module):
+    def __init__(self, in_channels: int = 770, hidden_channels: int = 128, heads: int = 1, dropout: float = 0.5):
         """
         İki katmanlı GAT tabanlı model. Çıktı olarak her düğüm için bir skalar logit üretir.
         """
-        super(MIXSelector, self).__init__()
+        super(GATGCNSelector, self).__init__()
         self.conv1 = GATConv(in_channels, hidden_channels, heads=heads, concat=True)
         self.norm1 = nn.LayerNorm(hidden_channels * heads)  # Normalizasyon katmanı ekleniyor.
         self.dropout = nn.Dropout(dropout)  # Dropout katmanı.

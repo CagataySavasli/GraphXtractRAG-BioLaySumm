@@ -1,6 +1,6 @@
-from lib.utility.MessageFactory import MessageFactory
-from lib.utility.ResultCalculator import ResultCalculator
-from lib.utility.CaseBuilder import CaseBuilder
+from lib.utility.message_factory import MessageFactory
+from lib.utility.result_calculator import ResultCalculator
+from lib.utility.case_builder import CaseBuilder
 
 import google.generativeai as genai
 

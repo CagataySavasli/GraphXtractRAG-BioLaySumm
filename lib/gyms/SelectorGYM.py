@@ -1,23 +1,20 @@
 # ----------------------------------------------------------------------------
-# This file contains the SelectorGYM class, which is a class that is used to train selector models.
+# This file contains the SelectorGYM class, which is a class that is
+# used to train selector models in alternating training strategy.
 # ----------------------------------------------------------------------------
 
 from lib.selectors.GCNSelector import GCNSelector
 from lib.selectors.GATSelector import GATSelector
-from lib.selectors.MIXSelector import MIXSelector
+from lib.selectors.models.gat_gcn_selector import MIXSelector
 from lib.prompt_factories.PromptFactory import PromptFactory
-from lib.utility.CaseBuilder import CaseBuilder
-from lib.utility.ResultCalculator import ResultCalculator
-from lib.utility.GraphGenerator import GraphGenerator
+from lib.utility.case_builder import CaseBuilder
+from lib.utility.result_calculator import ResultCalculator
+from lib.processors.graph_generator import GraphGenerator
 
 from typing import List, Tuple, Optional
 import time
 
 import pandas as pd
-import numpy as np
-
-from sklearn.metrics.pairwise import cosine_similarity
-from rouge_score import rouge_scorer
 
 import matplotlib.pyplot as plt
 
@@ -37,7 +34,7 @@ import logging
 
 logging.getLogger("transformers").setLevel(logging.ERROR)
 
-class SelectorGYM():
+class SelectorGYM:
     def __init__(self, selector_type: str,
                  df_train: pd.DataFrame,
                  df_test: pd.DataFrame):

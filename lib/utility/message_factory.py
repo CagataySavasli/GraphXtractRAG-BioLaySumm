@@ -1,7 +1,7 @@
 from lib.prompt_factories.PromptFactory import PromptFactory
-from lib.rag_factories.RAG_Factory import RAG_Factory
+from lib.rag_factories.rag_factory import RAG_Factory
 
-from lib.utility.CaseBuilder import CaseBuilder
+from lib.utility.case_builder import CaseBuilder
 
 import pandas as pd
 

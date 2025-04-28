@@ -1,7 +1,7 @@
 from lib.prompt_factories.FewShotPromptFactory import FewShotPromptFactory
 from lib.prompt_factories.ZeroShotPromptFactory import ZeroShotPromptFactory
 from lib.prompt_factories.LaySummaryPromptFactory import LaySummaryPromptFactory
-from lib.utility.CaseBuilder import CaseBuilder
+from lib.utility.case_builder import CaseBuilder
 
 class PromptFactory:
     def __init__(self, row=None, ref_rows=None):

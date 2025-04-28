@@ -1,4 +1,4 @@
-from lib.utility.CaseBuilder import CaseBuilder
+from lib.utility.case_builder import CaseBuilder
 from transformers import AutoTokenizer, AutoModel
 import pandas as pd
 import inflect

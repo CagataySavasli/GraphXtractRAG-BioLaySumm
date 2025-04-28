@@ -23,7 +23,6 @@ class CaseBuilder(metaclass=SingletonMeta):
                  bert_version: str = "BioBERT",
                  massage_strategy: str = "lay_summary",
                  rag_strategy: str = "graphxtract",
-                 rag_case: str = "top",
                  rag_n: int = 10,
                  lr: float = 5e-4,
                  batch_size: int = 16,
@@ -33,7 +32,6 @@ class CaseBuilder(metaclass=SingletonMeta):
         self.bert_version = bert_version
         self.massage_strategy = massage_strategy
         self.rag_strategy = rag_strategy
-        self.rag_case = rag_case
         self.rag_n = rag_n
         self.dataset_name = dataset_name
         self.lr = lr
@@ -52,4 +50,4 @@ class CaseBuilder(metaclass=SingletonMeta):
             self.genai_model_name = 'models/gemini-1.5-flash-001-tuning'
 
     def get_case_signature(self):
-        return f"{self.genai_version}_{self.bert_version}_{self.massage_strategy}_{self.rag_strategy}_{self.rag_case}_{self.dataset_name}.csv"
+        return f"{self.genai_version}_{self.bert_version}_{self.massage_strategy}_{self.rag_strategy}_{self.dataset_name}.csv"

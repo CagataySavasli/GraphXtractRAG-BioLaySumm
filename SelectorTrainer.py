@@ -1,6 +1,6 @@
 #%%
-from lib.utility.CaseBuilder import CaseBuilder
-from lib.utility.ResultCalculator import ResultCalculator
+from lib.utility.case_builder import CaseBuilder
+from lib.utility.result_calculator import ResultCalculator
 from lib.gyms.SelectorPipelineGYM import SelectorPipelineGYM
 import pandas as pd
 import sys

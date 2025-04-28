@@ -1,9 +1,10 @@
 #%%
 from lib.gyms.GeminiGYM import GeminiGYM
-from lib.utility.CaseBuilder import CaseBuilder
-from lib.utility.ResultCalculator import ResultCalculator
-from sklearn.model_selection import train_test_split
+from lib.utility.case_builder import CaseBuilder
+from lib.utility.result_calculator import ResultCalculator
+from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
+import numpy as np
 import json
 import sys
 #%%
@@ -24,6 +25,21 @@ df_test = pd.read_json(f'dataset/processed/{case_builder.dataset_name}/test.json
 
 print("Train Shape: ", df_train.shape)
 print("Test Shape: ", df_test.shape)
+#%%
+def get_similarity(row):
+    nodes = [x for y in row['sections_embedding'] for x in y]
+
+    # Tüm cosine similarity değerlerini hesapla
+    similarities = cosine_similarity(nodes)
+
+    # Ortalama cosine similarity hesaplama
+    avg_similarity = np.mean(similarities[np.triu_indices_from(similarities, k=1)])
+
+    return avg_similarity, similarities
+
+df_train[['avg_similarity', 'similarities']] = df_train.apply(get_similarity, axis=1, result_type='expand')
+df_test[['avg_similarity', 'similarities']] = df_test.apply(get_similarity, axis=1, result_type='expand')
+
 #%%
 gemini_gym = GeminiGYM()
 gemini_gym.set_train_data(df_train.copy())

@@ -1,5 +1,5 @@
-from lib.utility.DatasetGenerator import DatasetGenerator
-from lib.utility.CaseBuilder import CaseBuilder
+from lib.processors.dataset_generator import DatasetGenerator
+from lib.utility.case_builder import CaseBuilder
 import sys
 import pandas as pd
 

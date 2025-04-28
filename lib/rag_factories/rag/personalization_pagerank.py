@@ -1,12 +1,15 @@
-from lib.rag_factories.AbstractRAG_Factory import AbstractRAG_Factory
+from lib.rag_factories.rag.abstract_rag import AbstractRAG_Factory
+from lib.utility.case_builder import CaseBuilder
+
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import networkx as nx
 
 class PersonalizationPageRankRAG(AbstractRAG_Factory):
-    def __init__(self, case, n):
-        self.n = n
-        self.case = case
+    def __init__(self):
+        self.case_builder = CaseBuilder()
+        self.n = self.case_builder.rag_n
+
         self.row = None
         self.nodes = None
         self.sentences = None
@@ -24,7 +27,7 @@ class PersonalizationPageRankRAG(AbstractRAG_Factory):
         # Sections embedding'lerinden node'ları oluştur
         self.nodes = [x for y in row['sections_embedding'] for x in y]
         # Sections altındaki cümleleri al
-        self.sentences = [x for y in row['sections'] for x in y]
+        self.sentences = row['sentences']
 
         # Başlık, özet ve anahtar kelimelerin embedding'lerini personalization için kullan
         self.personalization = [
