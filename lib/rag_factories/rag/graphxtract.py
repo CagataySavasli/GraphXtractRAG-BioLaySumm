@@ -1,7 +1,6 @@
 from lib.rag_factories.rag.abstract_rag import AbstractRAG_Factory
 from lib.utility.case_builder import CaseBuilder
 
-
 import torch
 import torch.nn.functional as F
 

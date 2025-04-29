@@ -3,6 +3,7 @@ import networkx as nx
 from lib.rag_factories.rag.abstract_rag import AbstractRAG_Factory
 from lib.utility.case_builder import CaseBuilder
 
+
 class PageRankRAG(AbstractRAG_Factory):
     def __init__(self):
         print("PageRankRAG Factory")
@@ -10,7 +11,6 @@ class PageRankRAG(AbstractRAG_Factory):
         self.n = self.case_builder.rag_n
 
         self.row = None
-        self.nodes = None
         self.sentences = None
         self.graph = None
         self.pagerank = None
@@ -19,44 +19,51 @@ class PageRankRAG(AbstractRAG_Factory):
     def set_row(self, row, graph):
         self.reset()
         self.row = row
-        self.nodes = [x for y in row['sections_embedding'] for x in y]
         self.sentences = row['sentences']
         self.graph = graph
 
     def reset(self):
-        self.nodes = None
+        self.row = None
         self.sentences = None
         self.graph = None
         self.pagerank = None
         self.sorted_nodes = None
 
     def calculate_pagerank(self):
-        # Eğer torch_geometric.data.Data objesi geldiyse, önce NetworkX grafına çevir
+        # 1) PyG Data objesi geldiyse, önce NetworkX grafına dönüştür
         if isinstance(self.graph, Data):
             data = self.graph
+            num_sent = len(self.sentences)
+
             G = nx.DiGraph()
-            # Tüm düğümleri ekle
-            G.add_nodes_from(range(data.num_nodes))
-            # Kenarları, benzerlik (edge_attr[:,1]) ağırlığıyla ekle
+            # sadece gerçek sentence sayısı kadar node ekle
+            G.add_nodes_from(range(num_sent))
+
+            # kenarları ekle; U/V mutlaka [0, num_sent) aralığında olmalı
             for idx in range(data.edge_index.size(1)):
                 u = int(data.edge_index[0, idx])
                 v = int(data.edge_index[1, idx])
-                # edge_attr her zaman [inverse_distance, similarity] formatında
+                if u >= num_sent or v >= num_sent:
+                    continue
+                # edge_attr = [inverse_distance, similarity]
                 sim = float(data.edge_attr[idx][1])
                 G.add_edge(u, v, weight=sim)
         else:
-            # Zaten bir NetworkX grafı gelmişse direkt kullan
+            # önceden networkx grafı gelmişse direkt kullan
             G = self.graph
 
-        # PageRank hesapla (varsayılan weight='weight')
+        # 2) PageRank hesapla
         self.pagerank = nx.pagerank(G, weight='weight')
-        # Puanlara göre büyükten küçüğe düğüm indeksleri
+        # 3) en yüksekten en düşüğe düğüm indekslerini sırala
         self.sorted_nodes = sorted(self.pagerank, key=self.pagerank.get, reverse=True)
 
     def top_n_nodes(self):
-        return self.sorted_nodes[:self.n]
+        # olası OOB durumları temizle ve sadece ilk self.n elemanı al
+        valid = [i for i in self.sorted_nodes if 0 <= i < len(self.sentences)]
+        return valid[:self.n]
 
     def get_n_sentences(self):
         self.calculate_pagerank()
-        selected_indexes = self.top_n_nodes()
-        return [self.sentences[i] for i in selected_indexes]
+        selected = self.top_n_nodes()
+        # artık kesinlikle geçersiz indeks yok
+        return [self.sentences[i] for i in selected]

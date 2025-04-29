@@ -24,8 +24,14 @@ class SimilarityRAG(AbstractRAG_Factory):
     def set_row(self, row):
         self.reset()
         self.row = row
-        self.nodes = [x[2:] for y in row['sections_embedding'] for x in y]
-        self.sentences = row['sentences']
+        self.nodes = [x for y in row['sections_embedding'] for x in y]
+        self.sentences = [x for x in row['sentences']]
+
+        # Verify data consistency
+        if len(self.nodes) != len(self.sentences):
+            raise ValueError(
+                f"Mismatch between number of embeddings ({len(self.nodes)}) and sentences ({len(self.sentences)})")
+
 
     def reset(self):
         self.nodes = None
@@ -52,8 +58,18 @@ class SimilarityRAG(AbstractRAG_Factory):
         similarity = self.calculate_similarities()
         selected_indexes = self.get_top_n_index(similarity)
 
-        return [self.sentences[i] for i in selected_indexes]
+        return [self.sentences[i] for i in selected_indexes if i < len(self.sentences)]
 
+    # def get_n_sentences(self):
+    #     if not self.nodes or not self.sentences:
+    #         return []
+    #
+    #     similarity = self.calculate_similarities()
+    #     selected_indexes = self.get_top_n_index(similarity)
+    #
+    #     # Ensure indices are within bounds
+    #     valid_indexes = [i for i in selected_indexes if i < len(self.sentences)]
+    #     return [self.sentences[i] for i in valid_indexes]
 
 
 

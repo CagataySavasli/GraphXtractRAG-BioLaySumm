@@ -53,6 +53,7 @@ class RAG_Factory:
             graphs = list(graph_batch)
 
         if len(graphs) != len(rows):
+            print(len(graphs), len(rows))
             raise ValueError("row_batch ve graph_batch must have same length")
 
         # 3) Paralel olarak çalıştır
