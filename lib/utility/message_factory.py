@@ -1,44 +1,25 @@
-from lib.prompt_factories.PromptFactory import PromptFactory
-from lib.rag_factories.rag_factory import RAG_Factory
-
-from lib.utility.case_builder import CaseBuilder
+from lib.prompt_factories.prompt_factory import PromptFactory
 
 import pandas as pd
-
 
 class MessageFactory:
     def __init__(self):
 
         self.prompt_generator = PromptFactory()
-        self.rag_calculator = RAG_Factory()
 
-    def prepare_case(self, row: pd.Series):
-        self.rag_calculator.set_row(row)
-        row['rag_sentences'] = self.rag_calculator.get_n_sentences()
-        self.prompt_generator.set_row(row)
+    def create_message(self, row: pd.Series, selected_sentences: list[list[str]]) -> list[ dict]:
+        prompts = self.prompt_generator(selected_sentences)
+        summaries = [str(summary) for summary in row['summary'].tolist()]
 
-    def get_instruction(self) -> str:
-        instruction = self.prompt_generator.get_instruction()
-        return instruction
+        message_list = []
+        for prompt, summary in zip(prompts, summaries):
+            message_list.append({"text_input": prompt, "output": summary})
+        return message_list
 
-    def get_prompt(self, row: pd.Series) -> str:
-        self.prepare_case(row)
-        prompt = self.prompt_generator.get_prompt()
-        return prompt
-
-    def get_info(self, row: pd.Series) -> str:
-        self.prepare_case(row)
-        info = self.prompt_generator.get_info()
-        return info
-
-    def create_message(self, row: pd.Series) -> dict:
-        prompt = self.get_prompt(row)
+    def create_message_row(self, row: pd.Series, selected_sentences: list[str]) -> dict:
+        prompt = self.prompt_generator.get_prompt(selected_sentences)
         summary = str(row['summary'])
 
         return {"text_input": prompt, "output": summary}
 
-    def create_message_prompting(self, row: pd.Series) -> dict:
-        prompt = self.get_info(row)
-        summary = str(row['summary'])
-
-        return {"text_input": prompt, "output": summary}
+    __call__ = create_message

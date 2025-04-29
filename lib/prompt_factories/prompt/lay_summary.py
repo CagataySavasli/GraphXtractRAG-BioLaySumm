@@ -1,9 +1,9 @@
-from lib.prompt_factories.AbstractPromptFactory import AbstractPromptFactory
+from lib.prompt_factories.prompt.abstract_prompt_factory import AbstractPromptFactory
 
 
 class LaySummaryPromptFactory(AbstractPromptFactory):
-    def __init__(self, row=None):
-        super().__init__(row=row)
+    def __init__(self, selected_sentences=None):
+        super().__init__(selected_sentences=selected_sentences)
 
     def get_prompt(self):
         prompt = (
@@ -42,13 +42,22 @@ class LaySummaryPromptFactory(AbstractPromptFactory):
             "---\n"
         )
 
-    def few_info(self, row):
+    def few_info(self, selected_sentences):
         raise NotImplementedError("ZeroShotPromptFactory does not support few_info")
+
+    def sentence_list_to_string(self, sentence_list):
+        sentence_string = ""
+        for sentence in sentence_list:
+            sentence_string += "- " + sentence + "\n"
+        return sentence_string
 
     def info(self):
         return (
             "## INPUT:\n"
-            f"selected_key_sentences: {str(self.row['rag_sentences'])}\n"
+            f"selected_key_sentences: \n"
+            f"{self.sentence_list_to_string(self.selected_sentences)}\n" #['rag_sentences']
             "## OUTPUT:\n"
-            f"lay_summary: \n\n"
+            "Use this JSON schema:\n"
+            "{'lay_summary': str} \n"
+            "Return: dict"
         )
