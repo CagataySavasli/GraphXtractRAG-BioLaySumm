@@ -1,1 +1,3 @@
 from .graph_dataloader import GraphDataloader
+from .similarity_dataset import SimilarityDataset
+from .pagerank_dataset import PageRankDataset
