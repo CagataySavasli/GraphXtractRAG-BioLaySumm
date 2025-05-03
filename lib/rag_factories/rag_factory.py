@@ -23,28 +23,33 @@ class RAG_Factory:
         else:
             raise ValueError(f"Unsupported RAG strategy: {self.strategy}")
 
-    def _process_single(self, row, graph):
+    def _process_single(self, row, graph, selector_model=None):
+        # Thread-safe: her işlemde yeni factory üret
+        local_factory = self.build_factory()
 
-        # similarity yöntemi sadece row ister
+        if selector_model is not None:
+            local_factory.model = selector_model  # Model override
+
         if self.strategy == "similarity":
-            self.factory.set_row(row)
+            local_factory.set_row(row)
         else:
-            self.factory.set_row(row, graph)
-        return self.factory.get_n_sentences()
+            local_factory.set_row(row, graph)
+
+        return local_factory.get_n_sentences()
 
     def get_n_sentences_batch(
         self,
         row_batch: Union[pd.DataFrame, Iterable[pd.Series]],
         graph_batch: Union[Batch, Iterable] = None,
+        selector_model=None,
         max_workers: int = None
     ) -> List[List[str]]:
-        # 1) Satır listesini oluştur
+
         if isinstance(row_batch, pd.DataFrame):
             rows = [row_batch.iloc[i] for i in range(len(row_batch))]
         else:
             rows = list(row_batch)
 
-        # 2) Graph listesini oluştur
         if self.strategy == "similarity" or graph_batch is None:
             graphs = [None] * len(rows)
         elif isinstance(graph_batch, Batch):
@@ -53,20 +58,18 @@ class RAG_Factory:
             graphs = list(graph_batch)
 
         if len(graphs) != len(rows):
-            print(len(graphs), len(rows))
             raise ValueError("row_batch ve graph_batch must have same length")
 
-        # 3) Paralel olarak çalıştır
+        # Thread-safe map with model injection
         with ThreadPoolExecutor(max_workers=max_workers) as exe:
             results = list(
                 exe.map(
-                    lambda args: self._process_single(*args),
+                    lambda args: self._process_single(*args, selector_model),
                     zip(rows, graphs)
                 )
             )
         return results
 
-    # tekli kullanım da __call__ ile çalışsın:
     def get_n_sentences(self, row, graph=None):
         return self._process_single(row, graph)
 
