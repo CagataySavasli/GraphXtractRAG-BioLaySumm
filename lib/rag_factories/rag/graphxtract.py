@@ -6,7 +6,7 @@ import torch.nn.functional as F
 
 class GraphXtractRAG(AbstractRAG_Factory):
     def __init__(self):
-        print("GraphXtractRAG Factory")
+        # print("GraphXtractRAG Factory")
 
         self.case_builder = CaseBuilder()
         self.n = self.case_builder.rag_n
@@ -19,14 +19,19 @@ class GraphXtractRAG(AbstractRAG_Factory):
 
     def set_row(self, row, graph):
         self.row = row
-        self.sentences = self.sentences = row['sentences']
+        self.sentences = list(row['sentences'])
+        # print(len(self.sentences))
         self.graph = graph
 
     def select_sentences(self):
         with torch.no_grad():
-            logits = self.model(self.graph.x, self.graph.edge_index)  # shape: [num_nodes]
+            # logits = self.model(self.graph.x, self.graph.edge_index)  # shape: [num_nodes]
+            #
+            # n_sentence = min(self.n, len(self.graph.x))
 
-            n_sentence = min(self.n, len(self.graph.x))
+            n_sentence = min(self.n, len(self.sentences))
+
+            logits = self.graph
 
             # Logit'leri softmax ile olasılığa dönüştürüyoruz.
             probs = F.softmax(logits, dim=0)  # shape: [num_nodes]
@@ -44,3 +49,4 @@ class GraphXtractRAG(AbstractRAG_Factory):
 
     def get_n_sentences(self):
         return self.select_sentences()
+
