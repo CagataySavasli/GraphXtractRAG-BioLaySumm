@@ -15,12 +15,17 @@ class GATGCNSelector(nn.Module):
         self.dropout = nn.Dropout(dropout)  # Dropout katmanı.
         self.conv2 = GCNConv(hidden_channels * heads, 1)  # Her düğüm için skaler çıktı
 
-    def forward(self, x, edge_index):
+    def forward(self, graph):
+        x, edge_index, batch_idx = graph.x, graph.edge_index, graph.batch
         x = self.conv1(x, edge_index)
         x = F.relu(x)
-        x = self.norm1(x)  # Normalizasyon uygulandı.
-        x = self.dropout(x)  # Dropout uygulaması.
-        x = self.conv2(x, edge_index)  # shape: [num_nodes, 1]
-        x = x.squeeze(-1)  # shape: [num_nodes]
-        #x = torch.clamp(x, min=-50, max=50)  # Logit değerlerini sınırlıyoruz.
+        x = self.norm1(x)
+        x = self.dropout(x)
+        x = self.conv2(x, edge_index).squeeze(-1)     # [total_nodes]
+
         return x
+        #
+        # # Her graf için node logit’lerinin ortalamasını alıyoruz:
+        # graph_logits = global_mean_pool(x.unsqueeze(-1), batch_idx)
+        # # → [batch_size, 1]
+        # return graph_logits.squeeze(-1)
