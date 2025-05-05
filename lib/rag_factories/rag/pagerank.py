@@ -6,7 +6,7 @@ from lib.utility.case_builder import CaseBuilder
 
 class PageRankRAG(AbstractRAG_Factory):
     def __init__(self):
-        print("PageRankRAG Factory")
+
         self.case_builder = CaseBuilder()
         self.n = self.case_builder.rag_n
 

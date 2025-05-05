@@ -8,7 +8,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 class SimilarityRAG(AbstractRAG_Factory):
 
     def __init__(self):
-        print("SimilarityRAG Factory")
 
         self.case_builder = CaseBuilder()
         self.n = self.case_builder.rag_n
