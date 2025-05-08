@@ -40,12 +40,12 @@ class GraphXtractRAG(AbstractRAG_Factory):
             topk_probs, node_indices = torch.topk(probs, n_sentence)
 
             # Seçilen düğümlerin log olasılıklarının toplamı hesaplanır.
-            #selected_log_probs = torch.log(topk_probs).sum()
+            selected_log_probs = torch.log(topk_probs).sum()
 
             # Seçilen düğümlere ait cümleleri alıyoruz.
             selected_sentences = [self.sentences[i] for i in node_indices.tolist()]
 
-        return selected_sentences
+        return selected_sentences, selected_log_probs
 
     def get_n_sentences(self):
         return self.select_sentences()
