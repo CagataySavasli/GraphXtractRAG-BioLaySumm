@@ -22,7 +22,8 @@ class GeminiTester:
         # ^[^A-Za-z0-9]+  -> baştan alfanümerik olmayanları
         # [^A-Za-z0-9]+$  -> sondan alfanümerik olmayanları
 
-        s = s.split("lay_summary")[1]
+        if "lay_summary" in s:
+            s = s.split("lay_summary")[1]
 
         s = re.sub(
             r'^[^A-Za-z0-9]+|[^A-Za-z0-9]+$',
@@ -38,11 +39,15 @@ class GeminiTester:
         label = message["output"]
 
         answer = self.genai_model.generate_content(prompt)
+        # print(answer.text)
+        # print("#############################################333")
 
         try:
-            clean_answer = self.extract_summary(answer.text)
+            answer = answer.text
         except:
-            clean_answer = ""
+            answer = ""
+        # print("Answer: \n", answer)
+        clean_answer = self.extract_summary(answer) if answer != "" else answer
 
         return clean_answer, label
 
