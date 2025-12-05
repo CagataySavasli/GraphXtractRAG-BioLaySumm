@@ -5,16 +5,14 @@ from torch.utils.data import Dataset
 import ast
 
 class DatabaseConnector(Dataset):
-    def __init__(self, db_path='dataset/dataset.db', source_name='elife', split_name='train'):
+    def __init__(self, db_path='dataset/plos.db', table_name='validation'):
         self.db_path = db_path
-        self.source_name = source_name
-        self.split_name = split_name
+        self.table_name = table_name
 
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT COUNT(*) FROM dataset WHERE source=? AND split=?",
-                (self.source_name, self.split_name),
+                f"SELECT COUNT(*) FROM {self.table_name}"
             )
             self.length = cursor.fetchone()[0]
 
@@ -23,8 +21,7 @@ class DatabaseConnector(Dataset):
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT COUNT(*) FROM dataset WHERE source=? AND split=?",
-                (self.source_name, self.split_name),
+                f"SELECT COUNT(*) FROM {self.table_name}"
             )
             self.length = cursor.fetchone()[0]
 
@@ -35,8 +32,7 @@ class DatabaseConnector(Dataset):
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM dataset WHERE source=? AND split=? LIMIT 1 OFFSET ?",
-                (self.source_name, self.split_name, idx),
+                f"SELECT * FROM {self.table_name} LIMIT 1 OFFSET {idx}",
             )
             row = cursor.fetchone()
             columns = [description[0] for description in cursor.description]
@@ -55,8 +51,7 @@ class DatabaseConnector(Dataset):
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT title_embedding FROM dataset WHERE source=? AND split=?",
-                (self.source_name, self.split_name),
+                f"SELECT title_embeddings FROM {self.table_name}"
             )
             title_embeddings = cursor.fetchall()
 
