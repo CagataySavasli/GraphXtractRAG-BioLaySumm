@@ -23,7 +23,7 @@ Title: {title}
 
 Abstract: {abstract}
 
-Task: Write a draft lay summary for this article.
+- Task: Write a draft lay summary for this article.
 """
 
 # ==========================================
@@ -49,5 +49,5 @@ Current Draft:
 Key Facts (from full text):
 {selected_sentences}
 
-Task: Rewrite and refine the draft to include the key facts while maintaining simplicity. Provide ONLY the final summary.
+- Task: Rewrite and refine the draft to include the key facts while maintaining simplicity. Provide ONLY the final summary.
 """
