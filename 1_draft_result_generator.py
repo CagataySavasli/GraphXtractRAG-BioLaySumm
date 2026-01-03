@@ -1,4 +1,5 @@
 # %%
+import sys
 import pandas as pd
 from tqdm import tqdm
 
@@ -7,12 +8,18 @@ from lib.data.database_connector import DatabaseConnector
 from lib.message.prompt_generator import PromptGenerator
 # %%
 # --- 1. SETTINGS and GENERATION ---
-SELECTED_IDX = 0
+TABLE_IDX = int(sys.argv[1]) if len(sys.argv) >= 2 else 0
+MODEL_IDX = int(sys.argv[2]) if len(sys.argv) >= 3 else 0
 
-TABLE_NAME = ["train", "validation"][1]
+print(f"""
+TABLE_IDX: {TABLE_IDX}
+Model IDX: {MODEL_IDX}
+""")
 
-MODEL_PATH = ["llama3", "koesn/llama3-openbiollm-8b:q6_K", "gemma3", "alibayram/medgemma"][SELECTED_IDX]
-MODEL_NAME = ["llama3", "biollama3", "gemma3", "medgemma"][SELECTED_IDX]
+TABLE_NAME = ["train", "validation"][TABLE_IDX]
+
+MODEL_PATH = ["llama3", "koesn/llama3-openbiollm-8b:q6_K", "gemma3", "alibayram/medgemma"][MODEL_IDX]
+MODEL_NAME = ["llama3", "biollama3", "gemma3", "medgemma"][MODEL_IDX]
 
 SAVED_FILE_NAME = f"{TABLE_NAME}_{MODEL_NAME}_zero_result.csv"
 
