@@ -36,7 +36,7 @@ results = []
 print(f"{SAVED_FILE_NAME} will be generated ... (Refine Results)")
 # %%
 # --- Draft Result Generation Loop ---
-i = 0
+idx = 0
 for row in tqdm(db_connector, desc="Makaleler Özetleniyor"):
 
     # --- STEP A: Get Data and Find Pair Draft---
@@ -89,9 +89,10 @@ for row in tqdm(db_connector, desc="Makaleler Özetleniyor"):
         "generated_final": final_lay_summary,
         "ground_truth": " ".join(original_summary) if isinstance(original_summary, list) else original_summary
     })
-    i += 1
-    if i == 3:
-        break
+    idx += 1
+    if idx % 100 == 0:
+        df_result = pd.DataFrame(results)
+        df_result.to_csv(f"outputs/generated_texts/plos/refine/{SAVED_FILE_NAME}", index=False)
 # %%
 df_result = pd.DataFrame(results)
 df_result.to_csv(f"outputs/generated_texts/plos/refine/{SAVED_FILE_NAME}", index=False)
