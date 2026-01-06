@@ -29,6 +29,9 @@ class DatabaseConnector(Dataset):
         return self.length
 
     def __getitem__(self, idx):
+        if idx >= self.length:
+            raise IndexError("Index out of range")
+
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute(
