@@ -30,10 +30,9 @@ results = []
 
 print(f"{SAVED_FILE_NAME} will be generated ... (Draft Results)")
 # %%
-i = 0
 # --- Draft Result Generation Loop ---
+idx = 0
 for row in tqdm(db_connector, desc=f"Draft Results Generating with {MODEL_NAME}"):
-
     # --- STEP A: Get Data ---
     title = row['title'].values[0]
     abstract = " ".join(row['abstract'].values[0]) if isinstance(row['abstract'].values[0], list) else row['abstract'].values[0]
@@ -64,10 +63,12 @@ for row in tqdm(db_connector, desc=f"Draft Results Generating with {MODEL_NAME}"
         "ground_truth": " ".join(original_summary) if isinstance(original_summary, list) else original_summary,
     })
 
-    i += 1
-    if i == 10:
-        break
-# %%
+    idx += 1
+    if idx % 100 == 0:
+        df_result = pd.DataFrame(results)
+        df_result.to_csv(f"outputs/generated_texts/plos/draft/{SAVED_FILE_NAME}", index=False)
+
+# # %%
 df_result = pd.DataFrame(results)
 df_result.to_csv(f"outputs/generated_texts/plos/draft/{SAVED_FILE_NAME}", index=False)
 print(f"{SAVED_FILE_NAME} will be generated ... (Draft Results)")
