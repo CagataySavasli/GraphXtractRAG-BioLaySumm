@@ -47,7 +47,7 @@ for str_idx in range(0, len(df_all), 500):
 
     df_batch.to_parquet(
             save_path,
-            engine='pyarrow',  # 'pyarrow' veya 'fastparquet'
+            engine='pyarrow',
             index=False
         )
     print(f"Dataset saved to {save_path}")
