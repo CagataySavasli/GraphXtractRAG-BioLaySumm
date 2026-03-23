@@ -3,7 +3,6 @@ from lib import DataLoaderReloader, Preprocessor
 import pandas as pd
 from tqdm import tqdm
 
-# 1. tqdm'in pandas entegrasyonunu başlatın
 tqdm.pandas()
 
 DATA_NAME = ["plos", "elife"][0]
